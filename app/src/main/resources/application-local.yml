@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/rdid?useSSL=false&allowPublicKeyRetrieval=true
+    username: rdid
+    password: rdid
+    driver: com.mysql.cj.jdbc.Driver
