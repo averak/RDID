@@ -98,7 +98,6 @@ public abstract class AbstractRestController_IT {
 	 * POST request (Form)
 	 *
 	 * @param path   path
-	 *
 	 * @param params query params
 	 *
 	 * @return HTTP request builder
@@ -113,7 +112,6 @@ public abstract class AbstractRestController_IT {
 	 * POST request (JSON)
 	 *
 	 * @param path    path
-	 *
 	 * @param content request body
 	 *
 	 * @return HTTP request builder
@@ -128,7 +126,6 @@ public abstract class AbstractRestController_IT {
 	 * PUT request (JSON)
 	 *
 	 * @param path    path
-	 *
 	 * @param content request body
 	 *
 	 * @return HTTP request builder
@@ -154,7 +151,6 @@ public abstract class AbstractRestController_IT {
 	 * Execute request
 	 *
 	 * @param request HTTP request builder
-	 *
 	 * @param status  expected HTTP status
 	 *
 	 * @return MVC result
@@ -178,9 +174,7 @@ public abstract class AbstractRestController_IT {
 	 * Execute request / return response
 	 *
 	 * @param request HTTP request builder
-	 *
 	 * @param status  expected HTTP status
-	 *
 	 * @param clazz   response class
 	 *
 	 * @return response
@@ -204,7 +198,6 @@ public abstract class AbstractRestController_IT {
 	 * Execute request / verify exception
 	 *
 	 * @param request   HTTP request builder
-	 *
 	 * @param exception expected exception
 	 *
 	 * @return error response
