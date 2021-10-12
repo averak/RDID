@@ -29,9 +29,9 @@ import org.modelmapper.ModelMapper;
 import dev.abelab.rdid.annotation.IntegrationTest;
 import dev.abelab.rdid.db.entity.User;
 import dev.abelab.rdid.db.entity.UserSample;
+import dev.abelab.rdid.db.mapper.UserMapper;
 import dev.abelab.rdid.api.request.LoginRequest;
 import dev.abelab.rdid.api.response.ErrorResponse;
-import dev.abelab.rdid.repository.UserRepository;
 import dev.abelab.rdid.logic.UserLogic;
 import dev.abelab.rdid.service.AuthService;
 import dev.abelab.rdid.util.ConvertUtil;
@@ -64,7 +64,7 @@ public abstract class AbstractRestController_IT {
 	private ModelMapper modelMapper;
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserMapper userMapper;
 
 	@Autowired
 	private UserLogic userLogic;
@@ -229,7 +229,7 @@ public abstract class AbstractRestController_IT {
 			.email(LOGIN_USER_EMAIL) //
 			.password(this.userLogic.encodePassword(LOGIN_USER_PASSWORD)) //
 			.build();
-		this.userRepository.insert(loginUser);
+		this.userMapper.insert(loginUser);
 
 		return loginUser;
 	}
