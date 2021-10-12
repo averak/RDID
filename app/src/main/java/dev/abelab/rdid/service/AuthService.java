@@ -4,20 +4,26 @@ import java.util.Date;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.apache.commons.lang3.RandomStringUtils;
 import io.jsonwebtoken.*;
 
 import lombok.*;
 import dev.abelab.rdid.api.request.LoginRequest;
 import dev.abelab.rdid.api.response.AccessTokenResponse;
+import dev.abelab.rdid.db.entity.Token;
 import dev.abelab.rdid.repository.UserRepository;
+import dev.abelab.rdid.repository.TokenRepository;
 import dev.abelab.rdid.logic.UserLogic;
 import dev.abelab.rdid.property.JwtProperty;
+import dev.abelab.rdid.util.DateTimeUtil;
 
 @RequiredArgsConstructor
 @Service
 public class AuthService {
 
     private final UserRepository userRepository;
+
+    private final TokenRepository tokenRepository;
 
     private final UserLogic userLogic;
 
@@ -38,10 +44,36 @@ public class AuthService {
         // パスワードチェック
         this.userLogic.verifyPassword(loginUser, requestBody.getPassword());
 
+        // Opaqueトークンを発行
+        final var token = Token.builder() //
+            .userId(loginUser.getId()) //
+            .token(RandomStringUtils.randomAlphanumeric(255)) //
+            .expiredAt(DateTimeUtil.getNextWeek()) //
+            .build();
+        this.tokenRepository.insert(token);
+
+        return AccessTokenResponse.builder() //
+            .accessToken(token.getToken()) //
+            .tokenType("Bearer") //
+            .build();
+    }
+
+    /**
+     * トークン取得
+     *
+     * @param credential
+     *
+     * @return アクセストークンレスポンス
+     */
+    @Transactional
+    public AccessTokenResponse getToken(final String credential) {
+        // トークンを取得
+        final var token = this.tokenRepository.selectByToken(credential);
+
         // JWTを発行
         final var claims = Jwts.claims();
         claims.put(Claims.ISSUER, this.jwtProperty.getIssuer());
-        claims.put("id", loginUser.getId());
+        claims.put("id", token.getUserId());
 
         final var jwt = Jwts.builder() //
             .setClaims(claims) //

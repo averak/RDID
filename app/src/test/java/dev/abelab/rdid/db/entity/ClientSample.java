@@ -11,10 +11,10 @@ public class ClientSample extends AbstractSample {
 
 	public static class ClientSampleBuilder {
 
-		private Integer id = SAMPLE_INT;
+		private String id = SAMPLE_STR;
 		private String name = SAMPLE_STR;
 
-		public ClientSampleBuilder id(Integer id) {
+		public ClientSampleBuilder id(String id) {
 			this.id = id;
 			return this;
 		}
