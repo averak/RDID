@@ -47,7 +47,7 @@ public class AuthRestController_IT extends AbstractRestController_IT {
 			final var response = execute(request, HttpStatus.OK, AccessTokenResponse.class);
 
 			// verify
-			assertThat(response.getAccessToken()).isNotNull();
+			assertThat(response.getAccessToken().length()).isEqualTo(255);
 			assertThat(response.getTokenType()).isEqualTo("Bearer");
 		}
 
