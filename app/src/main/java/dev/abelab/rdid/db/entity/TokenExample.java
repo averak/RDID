@@ -195,6 +195,66 @@ public class TokenExample {
             criteria.add(new Criterion(condition, value1, value2));
         }
 
+        public Criteria andIdIsNull() {
+            addCriterion("id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIsNotNull() {
+            addCriterion("id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdEqualTo(Integer value) {
+            addCriterion("id =", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotEqualTo(Integer value) {
+            addCriterion("id <>", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThan(Integer value) {
+            addCriterion("id >", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("id >=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThan(Integer value) {
+            addCriterion("id <", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdLessThanOrEqualTo(Integer value) {
+            addCriterion("id <=", value, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdIn(List<Integer> values) {
+            addCriterion("id in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotIn(List<Integer> values) {
+            addCriterion("id not in", values, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdBetween(Integer value1, Integer value2) {
+            addCriterion("id between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
+        public Criteria andIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("id not between", value1, value2, "id");
+            return (Criteria) this;
+        }
+
         public Criteria andUserIdIsNull() {
             addCriterion("user_id is null");
             return (Criteria) this;
@@ -252,66 +312,6 @@ public class TokenExample {
 
         public Criteria andUserIdNotBetween(Integer value1, Integer value2) {
             addCriterion("user_id not between", value1, value2, "userId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdIsNull() {
-            addCriterion("client_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdIsNotNull() {
-            addCriterion("client_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdEqualTo(Integer value) {
-            addCriterion("client_id =", value, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdNotEqualTo(Integer value) {
-            addCriterion("client_id <>", value, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdGreaterThan(Integer value) {
-            addCriterion("client_id >", value, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("client_id >=", value, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdLessThan(Integer value) {
-            addCriterion("client_id <", value, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdLessThanOrEqualTo(Integer value) {
-            addCriterion("client_id <=", value, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdIn(List<Integer> values) {
-            addCriterion("client_id in", values, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdNotIn(List<Integer> values) {
-            addCriterion("client_id not in", values, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdBetween(Integer value1, Integer value2) {
-            addCriterion("client_id between", value1, value2, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("client_id not between", value1, value2, "clientId");
             return (Criteria) this;
         }
 
@@ -385,183 +385,63 @@ public class TokenExample {
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInIsNull() {
-            addCriterion("expired_in is null");
+        public Criteria andExpiredAtIsNull() {
+            addCriterion("expired_at is null");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInIsNotNull() {
-            addCriterion("expired_in is not null");
+        public Criteria andExpiredAtIsNotNull() {
+            addCriterion("expired_at is not null");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInEqualTo(Integer value) {
-            addCriterion("expired_in =", value, "expiredIn");
+        public Criteria andExpiredAtEqualTo(Date value) {
+            addCriterion("expired_at =", value, "expiredAt");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInNotEqualTo(Integer value) {
-            addCriterion("expired_in <>", value, "expiredIn");
+        public Criteria andExpiredAtNotEqualTo(Date value) {
+            addCriterion("expired_at <>", value, "expiredAt");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInGreaterThan(Integer value) {
-            addCriterion("expired_in >", value, "expiredIn");
+        public Criteria andExpiredAtGreaterThan(Date value) {
+            addCriterion("expired_at >", value, "expiredAt");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInGreaterThanOrEqualTo(Integer value) {
-            addCriterion("expired_in >=", value, "expiredIn");
+        public Criteria andExpiredAtGreaterThanOrEqualTo(Date value) {
+            addCriterion("expired_at >=", value, "expiredAt");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInLessThan(Integer value) {
-            addCriterion("expired_in <", value, "expiredIn");
+        public Criteria andExpiredAtLessThan(Date value) {
+            addCriterion("expired_at <", value, "expiredAt");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInLessThanOrEqualTo(Integer value) {
-            addCriterion("expired_in <=", value, "expiredIn");
+        public Criteria andExpiredAtLessThanOrEqualTo(Date value) {
+            addCriterion("expired_at <=", value, "expiredAt");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInIn(List<Integer> values) {
-            addCriterion("expired_in in", values, "expiredIn");
+        public Criteria andExpiredAtIn(List<Date> values) {
+            addCriterion("expired_at in", values, "expiredAt");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInNotIn(List<Integer> values) {
-            addCriterion("expired_in not in", values, "expiredIn");
+        public Criteria andExpiredAtNotIn(List<Date> values) {
+            addCriterion("expired_at not in", values, "expiredAt");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInBetween(Integer value1, Integer value2) {
-            addCriterion("expired_in between", value1, value2, "expiredIn");
+        public Criteria andExpiredAtBetween(Date value1, Date value2) {
+            addCriterion("expired_at between", value1, value2, "expiredAt");
             return (Criteria) this;
         }
 
-        public Criteria andExpiredInNotBetween(Integer value1, Integer value2) {
-            addCriterion("expired_in not between", value1, value2, "expiredIn");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtIsNull() {
-            addCriterion("created_at is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtIsNotNull() {
-            addCriterion("created_at is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtEqualTo(Date value) {
-            addCriterion("created_at =", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtNotEqualTo(Date value) {
-            addCriterion("created_at <>", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtGreaterThan(Date value) {
-            addCriterion("created_at >", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtGreaterThanOrEqualTo(Date value) {
-            addCriterion("created_at >=", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtLessThan(Date value) {
-            addCriterion("created_at <", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtLessThanOrEqualTo(Date value) {
-            addCriterion("created_at <=", value, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtIn(List<Date> values) {
-            addCriterion("created_at in", values, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtNotIn(List<Date> values) {
-            addCriterion("created_at not in", values, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtBetween(Date value1, Date value2) {
-            addCriterion("created_at between", value1, value2, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andCreatedAtNotBetween(Date value1, Date value2) {
-            addCriterion("created_at not between", value1, value2, "createdAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtIsNull() {
-            addCriterion("updated_at is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtIsNotNull() {
-            addCriterion("updated_at is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtEqualTo(Date value) {
-            addCriterion("updated_at =", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtNotEqualTo(Date value) {
-            addCriterion("updated_at <>", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtGreaterThan(Date value) {
-            addCriterion("updated_at >", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtGreaterThanOrEqualTo(Date value) {
-            addCriterion("updated_at >=", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtLessThan(Date value) {
-            addCriterion("updated_at <", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtLessThanOrEqualTo(Date value) {
-            addCriterion("updated_at <=", value, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtIn(List<Date> values) {
-            addCriterion("updated_at in", values, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtNotIn(List<Date> values) {
-            addCriterion("updated_at not in", values, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtBetween(Date value1, Date value2) {
-            addCriterion("updated_at between", value1, value2, "updatedAt");
-            return (Criteria) this;
-        }
-
-        public Criteria andUpdatedAtNotBetween(Date value1, Date value2) {
-            addCriterion("updated_at not between", value1, value2, "updatedAt");
+        public Criteria andExpiredAtNotBetween(Date value1, Date value2) {
+            addCriterion("expired_at not between", value1, value2, "expiredAt");
             return (Criteria) this;
         }
     }
