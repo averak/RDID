@@ -11,7 +11,7 @@ RDID(RCC Developer ID) is IdP for Ritsumeikan Computer Club.
 
 ### Requirements
 
-- Java OpenJDK 17
+- Java OpenJDK 11
 - Spring Boot 2.5
 - MySQL 8.0
 
