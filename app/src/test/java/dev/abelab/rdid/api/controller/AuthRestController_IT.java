@@ -33,7 +33,7 @@ public class AuthRestController_IT extends AbstractRestController_IT {
 
 		@Test
 		void 正_ユーザがログイン() throws Exception {
-			// setup
+			// given
 			createLoginUser();
 
 			// login request body
@@ -47,13 +47,13 @@ public class AuthRestController_IT extends AbstractRestController_IT {
 			final var response = execute(request, HttpStatus.OK, AccessTokenResponse.class);
 
 			// verify
-			assertThat(response.getAccessToken()).isNotNull();
+			assertThat(response.getAccessToken().length()).isEqualTo(255);
 			assertThat(response.getTokenType()).isEqualTo("Bearer");
 		}
 
 		@Test
 		void 異_存在しないユーザがログイン() throws Exception {
-			// setup
+			// given
 			final var loginUser = UserSample.builder().build();
 
 			// login request body
@@ -62,14 +62,14 @@ public class AuthRestController_IT extends AbstractRestController_IT {
 				.password(loginUser.getPassword()) //
 				.build();
 
-			// test
+			// test & verify
 			final var request = postRequest("/api/login", requestBody);
 			execute(request, new NotFoundException(ErrorCode.NOT_FOUND_USER));
 		}
 
 		@Test
 		void 異_パスワードが間違えている() throws Exception {
-			// setup
+			// given
 			createLoginUser();
 
 			// login request body
@@ -78,7 +78,7 @@ public class AuthRestController_IT extends AbstractRestController_IT {
 				.password(LOGIN_USER_PASSWORD + "dummy") //
 				.build();
 
-			// test
+			// test & verify
 			final var request = postRequest("/api/login", requestBody);
 			execute(request, new UnauthorizedException(ErrorCode.WRONG_PASSWORD));
 		}

@@ -12,7 +12,7 @@ public class UserGroupRoleSample extends AbstractSample {
 	public static class UserGroupRoleSampleBuilder {
 
 		private Integer groupId = SAMPLE_INT;
-		private Integer clientId = SAMPLE_INT;
+		private String clientId = SAMPLE_STR;
 		private Integer roleId = SAMPLE_INT;
 
 		public UserGroupRoleSampleBuilder groupId(Integer groupId) {
@@ -20,7 +20,7 @@ public class UserGroupRoleSample extends AbstractSample {
 			return this;
 		}
 
-		public UserGroupRoleSampleBuilder clientId(Integer clientId) {
+		public UserGroupRoleSampleBuilder clientId(String clientId) {
 			this.clientId = clientId;
 			return this;
 		}

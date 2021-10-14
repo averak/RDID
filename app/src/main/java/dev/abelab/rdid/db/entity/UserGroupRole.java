@@ -26,7 +26,7 @@ public class UserGroupRole {
      *
      * @mbg.generated
      */
-    private Integer clientId;
+    private String clientId;
 
     /**
      *
