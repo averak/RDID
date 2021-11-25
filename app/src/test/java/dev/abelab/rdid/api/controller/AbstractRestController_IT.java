@@ -28,13 +28,13 @@ import org.modelmapper.ModelMapper;
 
 import dev.abelab.rdid.annotation.IntegrationTest;
 import dev.abelab.rdid.db.entity.User;
-import dev.abelab.rdid.db.entity.UserSample;
 import dev.abelab.rdid.db.mapper.UserMapper;
 import dev.abelab.rdid.api.request.LoginRequest;
 import dev.abelab.rdid.api.response.ErrorResponse;
 import dev.abelab.rdid.logic.UserLogic;
 import dev.abelab.rdid.service.AuthService;
 import dev.abelab.rdid.util.ConvertUtil;
+import dev.abelab.rdid.helper.sample.UserSample;
 import dev.abelab.rdid.exception.BaseException;
 
 /**

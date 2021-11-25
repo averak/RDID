@@ -14,9 +14,9 @@ import mockit.Tested;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import dev.abelab.rdid.db.entity.UserSample;
 import dev.abelab.rdid.repository.UserRepository;
 import dev.abelab.rdid.property.JwtProperty;
+import dev.abelab.rdid.helper.sample.UserSample;
 import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.UnauthorizedException;
 

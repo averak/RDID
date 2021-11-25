@@ -1,4 +1,6 @@
-package dev.abelab.rdid.db.entity;
+package dev.abelab.rdid.helper.sample;
+
+import dev.abelab.rdid.db.entity.UserGroupRole;
 
 /**
  * UserGroupRole Sample Builder

@@ -1,4 +1,4 @@
-package dev.abelab.rdid.db.entity;
+package dev.abelab.rdid.helper.sample;
 
 import java.util.Date;
 

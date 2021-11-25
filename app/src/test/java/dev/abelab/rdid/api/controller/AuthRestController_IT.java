@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.http.HttpStatus;
 
-import dev.abelab.rdid.db.entity.UserSample;
 import dev.abelab.rdid.api.request.LoginRequest;
 import dev.abelab.rdid.api.response.AccessTokenResponse;
+import dev.abelab.rdid.helper.sample.UserSample;
 import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.NotFoundException;
 import dev.abelab.rdid.exception.UnauthorizedException;
