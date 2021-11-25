@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import dev.abelab.rdid.db.entity.UserSample;
 import dev.abelab.rdid.repository.UserRepository;
+import dev.abelab.rdid.property.JwtProperty;
 import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.UnauthorizedException;
 
@@ -26,6 +27,9 @@ public class UserLogic_UT extends AbstractLogic_UT {
 
 	@Injectable
 	PasswordEncoder passwordEncoder;
+
+	@Injectable
+	JwtProperty jwtProperty;
 
 	@Tested
 	UserLogic userLogic;
@@ -39,6 +43,9 @@ public class UserLogic_UT extends AbstractLogic_UT {
 
 		@Test
 		void 正_パスワードをハッシュ化() {
+			/*
+			 * given
+			 */
 			new Expectations() {
 				{
 					passwordEncoder.encode(anyString);
@@ -46,7 +53,9 @@ public class UserLogic_UT extends AbstractLogic_UT {
 				}
 			};
 
-			// verify
+			/*
+			 * test & verify
+			 */
 			final var encodedPassword = userLogic.encodePassword(SAMPLE_STR);
 			assertThat(encodedPassword).isEqualTo(SAMPLE_STR);
 		}
@@ -62,6 +71,9 @@ public class UserLogic_UT extends AbstractLogic_UT {
 
 		@Test
 		void 正_パスワードが一致している() {
+			/*
+			 * given
+			 */
 			final var user = UserSample.builder().build();
 
 			new Expectations() {
@@ -71,13 +83,17 @@ public class UserLogic_UT extends AbstractLogic_UT {
 				}
 			};
 
-			// verify
+			/*
+			 * test & verify
+			 */
 			assertDoesNotThrow(() -> userLogic.verifyPassword(user, anyString()));
 		}
 
 		@Test
 		void 異_パスワードが間違っている() {
-			// setup
+			/*
+			 * given
+			 */
 			final var user = UserSample.builder().build();
 
 			new Expectations() {
@@ -87,11 +103,40 @@ public class UserLogic_UT extends AbstractLogic_UT {
 				}
 			};
 
-			// verify
+			/*
+			 * test & verify
+			 */
 			final var occurredException = assertThrows(UnauthorizedException.class, () -> userLogic.verifyPassword(user, anyString()));
 			assertThat(occurredException.getErrorCode()).isEqualTo(ErrorCode.WRONG_PASSWORD);
 		}
 
 	}
 
+	/**
+	 * Test for get login user
+	 */
+	@Nested
+	@TestInstance(PER_CLASS)
+	public class GetLoginUserTest {
+
+		@Test
+		void 異_無効なJWT() {
+			/*
+			 * given
+			 */
+			new Expectations() {
+				{
+					jwtProperty.getSecret();
+					result = SAMPLE_STR;
+				}
+			};
+
+			/*
+			 * test & verify
+			 */
+			final var exception = assertThrows(UnauthorizedException.class, () -> userLogic.getLoginUser(SAMPLE_STR));
+			assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.INVALID_ACCESS_TOKEN);
+		}
+
+	}
 }

@@ -10,12 +10,15 @@ import io.jsonwebtoken.*;
 import lombok.*;
 import dev.abelab.rdid.api.request.LoginRequest;
 import dev.abelab.rdid.api.response.AccessTokenResponse;
+import dev.abelab.rdid.db.entity.User;
 import dev.abelab.rdid.db.entity.Token;
 import dev.abelab.rdid.repository.UserRepository;
 import dev.abelab.rdid.repository.TokenRepository;
 import dev.abelab.rdid.logic.UserLogic;
 import dev.abelab.rdid.property.JwtProperty;
 import dev.abelab.rdid.util.DateTimeUtil;
+import dev.abelab.rdid.exception.ErrorCode;
+import dev.abelab.rdid.exception.UnauthorizedException;
 
 @RequiredArgsConstructor
 @Service
@@ -59,7 +62,7 @@ public class AuthService {
     }
 
     /**
-     * トークン取得
+     * アクセストークンを取得
      *
      * @param credential
      *
@@ -89,4 +92,22 @@ public class AuthService {
             .build();
     }
 
+    /**
+     * ログインユーザを取得
+     *
+     * @param credentials 資格情報
+     *
+     * @return ログインユーザ
+     */
+    @Transactional
+    public User getLoginUser(final String credentials) {
+        // 資格情報の構文チェック
+        if (!credentials.startsWith("Bearer ")) {
+            throw new UnauthorizedException(ErrorCode.INVALID_ACCESS_TOKEN);
+        }
+        final var jwt = credentials.substring(7);
+
+        // ログインユーザを取得
+        return this.userLogic.getLoginUser(jwt);
+    }
 }
