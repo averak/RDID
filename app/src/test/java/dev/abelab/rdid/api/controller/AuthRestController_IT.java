@@ -25,11 +25,11 @@ public class AuthRestController_IT extends AbstractRestController_IT {
 	static final String LOGIN_PATH = BASE_PATH + "/login";
 
 	/**
-	 * ログインAPIのテスト
+	 * ログインAPIのIT
 	 */
 	@Nested
 	@TestInstance(PER_CLASS)
-	class LoginTest extends AbstractRestControllerInitialization_IT {
+	class Login_IT extends AbstractRestControllerInitialization_IT {
 
 		@Test
 		void 正_ユーザがログイン() throws Exception {

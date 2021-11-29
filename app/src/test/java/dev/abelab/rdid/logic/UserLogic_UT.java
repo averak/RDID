@@ -35,11 +35,11 @@ public class UserLogic_UT extends AbstractLogic_UT {
 	UserLogic userLogic;
 
 	/**
-	 * Test for encode password
+	 * UserLogic::encodePassword UT
 	 */
 	@Nested
 	@TestInstance(PER_CLASS)
-	public class EncodePasswordTest {
+	public class EncodePassword_UT {
 
 		@Test
 		void 正_パスワードをハッシュ化() {
@@ -63,11 +63,11 @@ public class UserLogic_UT extends AbstractLogic_UT {
 	}
 
 	/**
-	 * Test for verify password
+	 * UserLogic::verifyPassword UT
 	 */
 	@Nested
 	@TestInstance(PER_CLASS)
-	public class VerifyPasswordTest {
+	public class VerifyPassword_UT {
 
 		@Test
 		void 正_パスワードが一致している() {
@@ -112,31 +112,4 @@ public class UserLogic_UT extends AbstractLogic_UT {
 
 	}
 
-	/**
-	 * Test for get login user
-	 */
-	@Nested
-	@TestInstance(PER_CLASS)
-	public class GetLoginUserTest {
-
-		@Test
-		void 異_無効なJWT() {
-			/*
-			 * given
-			 */
-			new Expectations() {
-				{
-					jwtProperty.getSecret();
-					result = SAMPLE_STR;
-				}
-			};
-
-			/*
-			 * test & verify
-			 */
-			final var exception = assertThrows(UnauthorizedException.class, () -> userLogic.getLoginUser(SAMPLE_STR));
-			assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.INVALID_ACCESS_TOKEN);
-		}
-
-	}
 }

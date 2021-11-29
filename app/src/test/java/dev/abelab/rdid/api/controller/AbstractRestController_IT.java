@@ -24,15 +24,13 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
-import org.modelmapper.ModelMapper;
 
 import dev.abelab.rdid.annotation.IntegrationTest;
 import dev.abelab.rdid.db.entity.User;
 import dev.abelab.rdid.db.mapper.UserMapper;
-import dev.abelab.rdid.api.request.LoginRequest;
 import dev.abelab.rdid.api.response.ErrorResponse;
 import dev.abelab.rdid.logic.UserLogic;
-import dev.abelab.rdid.service.AuthService;
+import dev.abelab.rdid.util.AuthUtil;
 import dev.abelab.rdid.util.ConvertUtil;
 import dev.abelab.rdid.helper.sample.UserSample;
 import dev.abelab.rdid.exception.BaseException;
@@ -61,16 +59,13 @@ public abstract class AbstractRestController_IT {
 	private PlatformTransactionManager transactionManager;
 
 	@Autowired
-	private ModelMapper modelMapper;
-
-	@Autowired
 	private UserMapper userMapper;
 
 	@Autowired
 	private UserLogic userLogic;
 
 	@Autowired
-	private AuthService authService;
+	private AuthUtil authUtil;
 
 	/**
 	 * GET request
@@ -235,17 +230,14 @@ public abstract class AbstractRestController_IT {
 	}
 
 	/**
-	 * ログインユーザの資格情報を取得
+	 * ログインユーザのクレデンシャルを取得
 	 *
 	 * @param user ログインユーザ
 	 *
-	 * @return 資格情報
+	 * @return credentials
 	 */
 	public String getLoginUserCredentials(User user) throws Exception {
-		final var requestBody = this.modelMapper.map(user, LoginRequest.class);
-		final var accessToken = this.authService.login(requestBody);
-
-		return accessToken.getTokenType() + " " + accessToken.getAccessToken();
+		return "Bearer " + this.authUtil.generateCredentials(user);
 	}
 
 	@BeforeEach
