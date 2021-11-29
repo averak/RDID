@@ -16,6 +16,7 @@ import dev.abelab.rdid.repository.UserRepository;
 import dev.abelab.rdid.repository.TokenRepository;
 import dev.abelab.rdid.logic.UserLogic;
 import dev.abelab.rdid.property.JwtProperty;
+import dev.abelab.rdid.util.AuthUtil;
 import dev.abelab.rdid.util.DateTimeUtil;
 import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.UnauthorizedException;
@@ -29,6 +30,8 @@ public class AuthService {
     private final TokenRepository tokenRepository;
 
     private final UserLogic userLogic;
+
+    private final AuthUtil authUtil;
 
     private final JwtProperty jwtProperty;
 
@@ -64,14 +67,14 @@ public class AuthService {
     /**
      * アクセストークンを取得
      *
-     * @param credential
+     * @param credentials
      *
      * @return アクセストークンレスポンス
      */
     @Transactional
-    public AccessTokenResponse getToken(final String credential) {
+    public AccessTokenResponse getToken(final String credentials) {
         // トークンを取得
-        final var token = this.tokenRepository.selectByToken(credential);
+        final var token = this.tokenRepository.selectByToken(credentials);
 
         // JWTを発行
         final var claims = Jwts.claims();
@@ -95,19 +98,20 @@ public class AuthService {
     /**
      * ログインユーザを取得
      *
-     * @param credentials 資格情報
+     * @param credentials クレデンシャル
      *
      * @return ログインユーザ
      */
     @Transactional
     public User getLoginUser(final String credentials) {
-        // 資格情報の構文チェック
+        // クレデンシャルの構文チェック
         if (!credentials.startsWith("Bearer ")) {
             throw new UnauthorizedException(ErrorCode.INVALID_ACCESS_TOKEN);
         }
-        final var jwt = credentials.substring(7);
+        final var userId = this.authUtil.verifyCredentials(credentials.substring(7));
 
         // ログインユーザを取得
-        return this.userLogic.getLoginUser(jwt);
+        return this.userRepository.selectById(userId);
     }
+
 }
