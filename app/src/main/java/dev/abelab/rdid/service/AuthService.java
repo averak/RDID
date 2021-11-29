@@ -14,7 +14,6 @@ import dev.abelab.rdid.db.entity.User;
 import dev.abelab.rdid.db.entity.Token;
 import dev.abelab.rdid.repository.UserRepository;
 import dev.abelab.rdid.repository.TokenRepository;
-import dev.abelab.rdid.logic.UserLogic;
 import dev.abelab.rdid.property.JwtProperty;
 import dev.abelab.rdid.util.AuthUtil;
 import dev.abelab.rdid.util.DateTimeUtil;
@@ -28,8 +27,6 @@ public class AuthService {
     private final UserRepository userRepository;
 
     private final TokenRepository tokenRepository;
-
-    private final UserLogic userLogic;
 
     private final AuthUtil authUtil;
 
@@ -48,7 +45,7 @@ public class AuthService {
         final var loginUser = this.userRepository.selectByEmail(requestBody.getEmail());
 
         // パスワードチェック
-        this.userLogic.verifyPassword(loginUser, requestBody.getPassword());
+        this.authUtil.verifyPassword(loginUser, requestBody.getPassword());
 
         // Opaqueトークンを発行
         final var token = Token.builder() //

@@ -3,6 +3,7 @@ package dev.abelab.rdid.util;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.*;
+import static org.mockito.ArgumentMatchers.*;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,12 +12,17 @@ import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import dev.abelab.rdid.property.JwtProperty;
 import dev.abelab.rdid.helper.sample.UserSample;
 import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.UnauthorizedException;
 
 public class AuthUtil_UT extends AbstractUtil_UT {
+
+    @Injectable
+    PasswordEncoder passwordEncoder;
 
     @Injectable
     JwtProperty jwtProperty;
@@ -88,6 +94,56 @@ public class AuthUtil_UT extends AbstractUtil_UT {
              */
             final var exception = assertThrows(UnauthorizedException.class, () -> authUtil.verifyCredentials(credentials));
             assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.INVALID_ACCESS_TOKEN);
+        }
+
+    }
+
+    /**
+     * AuthUtil::verifyPassword UT
+     */
+    @Nested
+    @TestInstance(PER_CLASS)
+    public class VerifyPassword_UT {
+
+        @Test
+        void 正_パスワードが一致している() throws Exception {
+            /*
+             * given
+             */
+            final var user = UserSample.builder().build();
+
+            new Expectations() {
+                {
+                    passwordEncoder.matches(anyString, anyString);
+                    result = true;
+                }
+            };
+
+            /*
+             * test & verify
+             */
+            assertDoesNotThrow(() -> authUtil.verifyPassword(user, anyString()));
+        }
+
+        @Test
+        void 異_パスワードが一致しない() throws Exception {
+            /*
+             * given
+             */
+            final var user = UserSample.builder().build();
+
+            new Expectations() {
+                {
+                    passwordEncoder.matches(anyString, anyString);
+                    result = false;
+                }
+            };
+
+            /*
+             * test & verify
+             */
+            final var exception = assertThrows(UnauthorizedException.class, () -> authUtil.verifyPassword(user, anyString()));
+            assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.WRONG_PASSWORD);
         }
 
     }

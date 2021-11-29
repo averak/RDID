@@ -29,7 +29,6 @@ import dev.abelab.rdid.annotation.IntegrationTest;
 import dev.abelab.rdid.db.entity.User;
 import dev.abelab.rdid.db.mapper.UserMapper;
 import dev.abelab.rdid.api.response.ErrorResponse;
-import dev.abelab.rdid.logic.UserLogic;
 import dev.abelab.rdid.util.AuthUtil;
 import dev.abelab.rdid.util.ConvertUtil;
 import dev.abelab.rdid.helper.sample.UserSample;
@@ -46,7 +45,7 @@ public abstract class AbstractRestController_IT {
 	protected static final Integer SAMPLE_INT = 1;
 	protected static final String SAMPLE_STR = "SAMPLE STRING";
 	protected static final Date SAMPLE_DATE = new Date();
-	protected static final String LOGIN_USER_EMAIL = "login_user@abelab.dev";
+	protected static final String LOGIN_USER_EMAIL = "test@example.com";
 	protected static final String LOGIN_USER_PASSWORD = "f4BabxEr7xA6";
 	protected static final Integer LOGIN_USER_ADMISSION_AT = SAMPLE_INT;
 
@@ -60,9 +59,6 @@ public abstract class AbstractRestController_IT {
 
 	@Autowired
 	private UserMapper userMapper;
-
-	@Autowired
-	private UserLogic userLogic;
 
 	@Autowired
 	private AuthUtil authUtil;
@@ -222,7 +218,7 @@ public abstract class AbstractRestController_IT {
 	public User createLoginUser() {
 		final var loginUser = UserSample.builder() //
 			.email(LOGIN_USER_EMAIL) //
-			.password(this.userLogic.encodePassword(LOGIN_USER_PASSWORD)) //
+			.password(this.authUtil.encodePassword(LOGIN_USER_PASSWORD)) //
 			.build();
 		this.userMapper.insert(loginUser);
 
