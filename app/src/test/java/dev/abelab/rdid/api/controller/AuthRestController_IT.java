@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.http.HttpStatus;
 
-import dev.abelab.rdid.db.entity.UserSample;
 import dev.abelab.rdid.api.request.LoginRequest;
 import dev.abelab.rdid.api.response.AccessTokenResponse;
+import dev.abelab.rdid.helper.sample.UserSample;
 import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.NotFoundException;
 import dev.abelab.rdid.exception.UnauthorizedException;
@@ -25,15 +25,17 @@ public class AuthRestController_IT extends AbstractRestController_IT {
 	static final String LOGIN_PATH = BASE_PATH + "/login";
 
 	/**
-	 * ログインAPIのテスト
+	 * ログインAPIのIT
 	 */
 	@Nested
 	@TestInstance(PER_CLASS)
-	class LoginTest extends AbstractRestControllerInitialization_IT {
+	class Login_IT extends AbstractRestControllerInitialization_IT {
 
 		@Test
 		void 正_ユーザがログイン() throws Exception {
-			// given
+			/*
+			 * given
+			 */
 			createLoginUser();
 
 			// login request body
@@ -42,18 +44,24 @@ public class AuthRestController_IT extends AbstractRestController_IT {
 				.password(LOGIN_USER_PASSWORD) //
 				.build();
 
-			// test
+			/*
+			 * test
+			 */
 			final var request = postRequest("/api/login", requestBody);
 			final var response = execute(request, HttpStatus.OK, AccessTokenResponse.class);
 
-			// verify
+			/*
+			 * verify
+			 */
 			assertThat(response.getAccessToken().length()).isEqualTo(255);
 			assertThat(response.getTokenType()).isEqualTo("Bearer");
 		}
 
 		@Test
 		void 異_存在しないユーザがログイン() throws Exception {
-			// given
+			/*
+			 * given
+			 */
 			final var loginUser = UserSample.builder().build();
 
 			// login request body
@@ -62,14 +70,18 @@ public class AuthRestController_IT extends AbstractRestController_IT {
 				.password(loginUser.getPassword()) //
 				.build();
 
-			// test & verify
+			/*
+			 * test & verify
+			 */
 			final var request = postRequest("/api/login", requestBody);
 			execute(request, new NotFoundException(ErrorCode.NOT_FOUND_USER));
 		}
 
 		@Test
 		void 異_パスワードが間違えている() throws Exception {
-			// given
+			/*
+			 * given
+			 */
 			createLoginUser();
 
 			// login request body
@@ -78,7 +90,9 @@ public class AuthRestController_IT extends AbstractRestController_IT {
 				.password(LOGIN_USER_PASSWORD + "dummy") //
 				.build();
 
-			// test & verify
+			/*
+			 * test & verify
+			 */
 			final var request = postRequest("/api/login", requestBody);
 			execute(request, new UnauthorizedException(ErrorCode.WRONG_PASSWORD));
 		}
