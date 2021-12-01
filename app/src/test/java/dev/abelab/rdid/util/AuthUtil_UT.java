@@ -3,11 +3,18 @@ package dev.abelab.rdid.util;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.*;
+import static org.junit.jupiter.params.provider.Arguments.*;
 import static org.mockito.ArgumentMatchers.*;
+
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
@@ -17,6 +24,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import dev.abelab.rdid.property.JwtProperty;
 import dev.abelab.rdid.helper.sample.UserSample;
 import dev.abelab.rdid.exception.ErrorCode;
+import dev.abelab.rdid.exception.BaseException;
+import dev.abelab.rdid.exception.BadRequestException;
 import dev.abelab.rdid.exception.UnauthorizedException;
 
 public class AuthUtil_UT extends AbstractUtil_UT {
@@ -144,6 +153,47 @@ public class AuthUtil_UT extends AbstractUtil_UT {
              */
             final var exception = assertThrows(UnauthorizedException.class, () -> authUtil.verifyPassword(user, anyString()));
             assertThat(exception.getErrorCode()).isEqualTo(ErrorCode.WRONG_PASSWORD);
+        }
+
+    }
+
+    /**
+     * AuthUtil::validatePassword UT
+     */
+    @Nested
+    @TestInstance(PER_CLASS)
+    public class ValidatePassword_UT {
+
+        @ParameterizedTest
+        @MethodSource
+        void 有効なパスワードかチェック(final String password, final BaseException expectedException) {
+            /*
+             * test & verify
+             */
+            if (Objects.isNull(expectedException)) {
+                assertDoesNotThrow(() -> authUtil.validatePassword(password));
+            } else {
+                final var occurredException = assertThrows(expectedException.getClass(), () -> authUtil.validatePassword(password));
+                assertThat(occurredException.getErrorCode()).isEqualTo(expectedException.getErrorCode());
+            }
+        }
+
+        Stream<Arguments> 有効なパスワードかチェック() {
+            return Stream.of( // パスワード、期待される例外
+                // 有効
+                arguments("f4BabxEr", null), //
+                arguments("f4BabxEr4gNsjdtRpH9Pfs6Atth9bqdA", null), //
+                // 無効：8文字以下
+                arguments("f4BabxE", new BadRequestException(ErrorCode.INVALID_PASSWORD_SIZE)), //
+                // 無効：33文字以上
+                arguments("f4BabxEr4gNsjdtRpH9Pfs6Atth9bqdAN", new BadRequestException(ErrorCode.INVALID_PASSWORD_SIZE)), //
+                // 無効：大文字を含まない
+                arguments("f4babxer", new BadRequestException(ErrorCode.TOO_SIMPLE_PASSWORD)), //
+                // 無効：小文字を含まない
+                arguments("F4BABXER", new BadRequestException(ErrorCode.TOO_SIMPLE_PASSWORD)), //
+                // 無効：数字を含まない
+                arguments("fxbabxEr", new BadRequestException(ErrorCode.TOO_SIMPLE_PASSWORD)) //
+            );
         }
 
     }
