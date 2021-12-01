@@ -66,8 +66,8 @@ public class UserRestController {
      * @param loginUser   ログインユーザ
      */
     @ApiOperation( //
-        value = "ユーザ一覧の取得", //
-        notes = "ユーザ一覧を取得する。" //
+        value = "ユーザの作成", //
+        notes = "ユーザを作成する。" //
     )
     @ApiResponses( //
         value = { //
