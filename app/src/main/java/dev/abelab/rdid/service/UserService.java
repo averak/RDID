@@ -89,4 +89,16 @@ public class UserService {
         this.userRepository.update(user);
     }
 
+    /**
+     * ユーザを削除
+     *
+     * @param userId    ユーザID
+     * @param loginUser ログインユーザ
+     */
+    @Transactional
+    public void deleteUser(final Integer userId, final User loginUesr) {
+        // ユーザの削除
+        this.userRepository.deleteById(userId);
+    }
+
 }

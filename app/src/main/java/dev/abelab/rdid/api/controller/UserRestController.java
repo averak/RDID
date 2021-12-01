@@ -119,4 +119,31 @@ public class UserRestController {
             requestBody.getAdmissionYear(), loginUser);
     }
 
+    /**
+     * ユーザ削除API
+     *
+     * @param userId    ユーザID
+     * @param loginUser ログインユーザ
+     */
+    @ApiOperation( //
+        value = "ユーザの削除", //
+        notes = "ユーザを削除する。" //
+    )
+    @ApiResponses( //
+        value = { //
+                @ApiResponse(code = 200, message = "削除成功"), //
+                @ApiResponse(code = 401, message = "ユーザがログインしていない"), //
+                @ApiResponse(code = 403, message = "ユーザに権限がない"), //
+                @ApiResponse(code = 404, message = "ユーザが存在しない"), //
+        } //
+    )
+    @DeleteMapping(value = "/{user_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser( //
+        @ApiParam(name = "user_id", required = true, value = "ユーザID") @PathVariable("user_id") final int userId, //
+        @ModelAttribute("LoginUser") final User loginUser //
+    ) {
+        this.userService.deleteUser(userId, loginUser);
+    }
+
 }
