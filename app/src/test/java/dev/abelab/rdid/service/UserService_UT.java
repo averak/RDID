@@ -3,32 +3,20 @@ package dev.abelab.rdid.service;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.*;
-import static org.junit.jupiter.params.provider.Arguments.*;
 import static org.mockito.ArgumentMatchers.*;
-
-import java.util.Objects;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
-
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import dev.abelab.rdid.repository.UserRepository;
 import dev.abelab.rdid.util.AuthUtil;
 import dev.abelab.rdid.helper.sample.UserSample;
 import dev.abelab.rdid.exception.ErrorCode;
-import dev.abelab.rdid.exception.BaseException;
-import dev.abelab.rdid.exception.BadRequestException;
 import dev.abelab.rdid.exception.ConflictException;
-import dev.abelab.rdid.exception.UnauthorizedException;
 
 public class UserService_UT extends AbstractService_UT {
 
