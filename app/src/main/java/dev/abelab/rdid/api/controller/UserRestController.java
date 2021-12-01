@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import io.swagger.annotations.*;
 import lombok.*;
 import dev.abelab.rdid.annotation.Authenticated;
+import dev.abelab.rdid.api.request.UserCreateRequest;
 import dev.abelab.rdid.api.response.UserResponse;
 import dev.abelab.rdid.api.response.UsersResponse;
 import dev.abelab.rdid.db.entity.User;
@@ -56,6 +57,34 @@ public class UserRestController {
             .collect(Collectors.toList());
 
         return new UsersResponse(userResponses);
+    }
+
+    /**
+     * ユーザ作成API
+     *
+     * @param requestBody ユーザ作成リクエスト
+     * @param loginUser   ログインユーザ
+     */
+    @ApiOperation( //
+        value = "ユーザ一覧の取得", //
+        notes = "ユーザ一覧を取得する。" //
+    )
+    @ApiResponses( //
+        value = { //
+                @ApiResponse(code = 201, message = "作成成功"), //
+                @ApiResponse(code = 401, message = "ユーザがログインしていない"), //
+                @ApiResponse(code = 403, message = "ユーザに権限がない"), //
+                @ApiResponse(code = 409, message = "メールアドレスが既に存在している"), //
+        } //
+    )
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createUser( //
+        @Validated @ApiParam(name = "body", required = true, value = "ユーザ作成情報") @RequestBody final UserCreateRequest requestBody, //
+        @ModelAttribute("LoginUser") final User loginUser //
+    ) {
+        this.userService.createUser(requestBody.getFirstName(), requestBody.getLastName(), requestBody.getEmail(),
+            requestBody.getAdmissionYear(), requestBody.getPassword(), loginUser);
     }
 
 }
