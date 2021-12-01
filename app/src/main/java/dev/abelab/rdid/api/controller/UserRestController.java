@@ -12,6 +12,7 @@ import io.swagger.annotations.*;
 import lombok.*;
 import dev.abelab.rdid.annotation.Authenticated;
 import dev.abelab.rdid.api.request.UserCreateRequest;
+import dev.abelab.rdid.api.request.UserUpdateRequest;
 import dev.abelab.rdid.api.response.UserResponse;
 import dev.abelab.rdid.api.response.UsersResponse;
 import dev.abelab.rdid.db.entity.User;
@@ -85,6 +86,37 @@ public class UserRestController {
     ) {
         this.userService.createUser(requestBody.getFirstName(), requestBody.getLastName(), requestBody.getEmail(),
             requestBody.getAdmissionYear(), requestBody.getPassword(), loginUser);
+    }
+
+    /**
+     * ユーザ更新API
+     *
+     * @param userId      ユーザID
+     * @param requestBody ユーザ更新リクエスト
+     * @param loginUser   ログインユーザ
+     */
+    @ApiOperation( //
+        value = "ユーザの更新", //
+        notes = "ユーザを更新する。" //
+    )
+    @ApiResponses( //
+        value = { //
+                @ApiResponse(code = 200, message = "更新成功"), //
+                @ApiResponse(code = 401, message = "ユーザがログインしていない"), //
+                @ApiResponse(code = 403, message = "ユーザに権限がない"), //
+                @ApiResponse(code = 404, message = "ユーザが存在しない"), //
+                @ApiResponse(code = 409, message = "メールアドレスが既に存在している"), //
+        } //
+    )
+    @PutMapping(value = "/{user_id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateUser( //
+        @ApiParam(name = "user_id", required = true, value = "ユーザID") @PathVariable("user_id") final int userId, //
+        @Validated @ApiParam(name = "body", required = true, value = "ユーザ更新情報") @RequestBody final UserUpdateRequest requestBody, //
+        @ModelAttribute("LoginUser") final User loginUser //
+    ) {
+        this.userService.updateUser(userId, requestBody.getFirstName(), requestBody.getLastName(), requestBody.getEmail(),
+            requestBody.getAdmissionYear(), loginUser);
     }
 
 }
