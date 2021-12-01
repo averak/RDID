@@ -11,6 +11,7 @@ import lombok.*;
 import dev.abelab.rdid.db.entity.User;
 import dev.abelab.rdid.property.JwtProperty;
 import dev.abelab.rdid.exception.ErrorCode;
+import dev.abelab.rdid.exception.BadRequestException;
 import dev.abelab.rdid.exception.UnauthorizedException;
 
 @RequiredArgsConstructor
@@ -89,12 +90,27 @@ public class AuthUtil {
      * パスワードを検証
      *
      * @param user     ユーザ
-     *
      * @param password パスワード
      */
     public void verifyPassword(final User user, final String password) {
         if (!this.passwordEncoder.matches(password, user.getPassword())) {
             throw new UnauthorizedException(ErrorCode.WRONG_PASSWORD);
+        }
+    }
+
+    /**
+     * パスワードのバリデーション
+     *
+     * @param password パスワード
+     */
+    public void validatePassword(final String password) {
+        // 8~32文字かどうか
+        if (password.length() < 8 || password.length() > 32) {
+            throw new BadRequestException(ErrorCode.INVALID_PASSWORD_SIZE);
+        }
+        // 大文字・小文字・数字を含むか
+        if (!password.matches("^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).+$")) {
+            throw new BadRequestException(ErrorCode.TOO_SIMPLE_PASSWORD);
         }
     }
 
