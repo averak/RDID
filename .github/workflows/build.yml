@@ -21,4 +21,4 @@ jobs:
           java-version: "11"
 
       - name: Run build
-        run: ./gradlew build -x test
+        run: ./gradlew bootJar
