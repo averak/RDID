@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.modelmapper.ModelMapper;
 
 import dev.abelab.rdid.api.request.UserCreateRequest;
+import dev.abelab.rdid.api.request.UserUpdateRequest;
 import dev.abelab.rdid.api.response.UserResponse;
 import dev.abelab.rdid.api.response.UsersResponse;
 import dev.abelab.rdid.db.entity.User;
@@ -32,6 +33,7 @@ import dev.abelab.rdid.helper.util.RandomUtil;
 import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.BaseException;
 import dev.abelab.rdid.exception.BadRequestException;
+import dev.abelab.rdid.exception.NotFoundException;
 import dev.abelab.rdid.exception.ConflictException;
 import dev.abelab.rdid.exception.UnauthorizedException;
 
@@ -44,6 +46,7 @@ public class UserRestController_IT extends AbstractRestController_IT {
 	static final String BASE_PATH = "/api/users";
 	static final String GET_USERS_PATH = BASE_PATH;
 	static final String CREATE_USER_PATH = BASE_PATH;
+	static final String UPDATE_USER_PATH = BASE_PATH + "/%d";
 
 	@Autowired
 	ModelMapper modelMapper;
@@ -225,6 +228,106 @@ public class UserRestController_IT extends AbstractRestController_IT {
 			 * test & verify
 			 */
 			final var request = postRequest(CREATE_USER_PATH, requestBody);
+			request.header(HttpHeaders.AUTHORIZATION, "");
+			execute(request, new UnauthorizedException(ErrorCode.INVALID_ACCESS_TOKEN));
+		}
+
+	}
+
+	/**
+	 * ユーザ更新APIのIT
+	 */
+	@Nested
+	@TestInstance(PER_CLASS)
+	class UpdateUser_IT extends AbstractRestControllerInitialization_IT {
+
+		@Test
+		void 正_ユーザを更新() throws Exception {
+			/*
+			 * given
+			 */
+			final var loginUser = createLoginUser();
+			final var credentials = getLoginUserCredentials(loginUser);
+
+			final var user = UserSample.builder().build();
+			userMapper.insert(user);
+
+			user.setEmail(user.getEmail() + "xxx");
+			user.setFirstName(user.getFirstName() + "xxx");
+			user.setLastName(user.getLastName() + "xxx");
+			user.setAdmissionYear(user.getAdmissionYear() + 1);
+			final var requestBody = modelMapper.map(user, UserUpdateRequest.class);
+
+			/*
+			 * test
+			 */
+			final var request = putRequest(String.format(UPDATE_USER_PATH, user.getId()), requestBody);
+			request.header(HttpHeaders.AUTHORIZATION, credentials);
+			execute(request, HttpStatus.OK);
+
+			/*
+			 * verify
+			 */
+			final var updatedUser = userMapper.selectByPrimaryKey(user.getId());
+			assertThat(updatedUser) //
+				.extracting(User::getEmail, User::getFirstName, User::getLastName, User::getAdmissionYear) //
+				.containsExactly( //
+					requestBody.getEmail(), requestBody.getFirstName(), requestBody.getLastName(), requestBody.getAdmissionYear());
+		}
+
+		@Test
+		void 異_更新後のメールアドレスが既に存在する() throws Exception {
+			/*
+			 * given
+			 */
+			final var loginUser = createLoginUser();
+			final var credentials = getLoginUserCredentials(loginUser);
+
+			final var user = UserSample.builder().build();
+			userMapper.insert(user);
+
+			user.setEmail(loginUser.getEmail());
+			final var requestBody = modelMapper.map(user, UserUpdateRequest.class);
+
+			/*
+			 * test & verify
+			 */
+			final var request = putRequest(String.format(UPDATE_USER_PATH, user.getId()), requestBody);
+			request.header(HttpHeaders.AUTHORIZATION, credentials);
+			execute(request, new ConflictException(ErrorCode.CONFLICT_EMAIL));
+		}
+
+		@Test
+		void 異_更新対象ユーザが存在しない() throws Exception {
+			/*
+			 * given
+			 */
+			final var loginUser = createLoginUser();
+			final var credentials = getLoginUserCredentials(loginUser);
+
+			final var user = UserSample.builder().build();
+			final var requestBody = modelMapper.map(user, UserUpdateRequest.class);
+
+			/*
+			 * test & verify
+			 */
+			final var request = putRequest(String.format(UPDATE_USER_PATH, SAMPLE_INT), requestBody);
+			request.header(HttpHeaders.AUTHORIZATION, credentials);
+			execute(request, new NotFoundException(ErrorCode.NOT_FOUND_USER));
+		}
+
+		@Test
+		void 異_無効な認証ヘッダ() throws Exception {
+			/*
+			 * given
+			 */
+			final var user = UserSample.builder().build();
+			final var requestBody = modelMapper.map(user, UserUpdateRequest.class);
+
+			/*
+			 * test & verify
+			 */
+			final var request = putRequest(String.format(UPDATE_USER_PATH, SAMPLE_INT), requestBody);
 			request.header(HttpHeaders.AUTHORIZATION, "");
 			execute(request, new UnauthorizedException(ErrorCode.INVALID_ACCESS_TOKEN));
 		}
