@@ -2,24 +2,27 @@ package dev.abelab.rdid.api.controller;
 
 import java.util.Locale;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import javax.validation.ConstraintViolationException;
-import springfox.documentation.annotations.ApiIgnore;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
-import dev.abelab.rdid.exception.ErrorCode;
-import dev.abelab.rdid.exception.BaseException;
 import dev.abelab.rdid.api.response.ErrorResponse;
+import dev.abelab.rdid.exception.BaseException;
+import dev.abelab.rdid.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * Rest controller exception handler

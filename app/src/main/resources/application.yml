@@ -22,8 +22,14 @@ spring:
 
 server:
   port: 8080
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
 
 project:
+  name: rdid
+  version: 1.0_SNAPSHOP
   package: dev.abelab.rdid
   mybatis:
     config:
@@ -35,8 +41,9 @@ project:
       type: XMLMAPPER
     map:
       package: db.mapper.base
-  protocol: http
-  hostname: localhost:${server.port}
+  swagger:
+    protocol: http
+    hostname: localhost:${server.port}
 
 mybatis:
   configuration:
@@ -48,7 +55,7 @@ mybatis:
 jwt:
   secret: yjA4Q3jHenlf3hp25eHMhw==
   issuer: rdid.abelab.dev
-  expired_in: 604800
+  timeout: 604800
 
 logging:
   level:

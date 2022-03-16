@@ -2,23 +2,25 @@ package dev.abelab.rdid.service;
 
 import java.util.Date;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.apache.commons.lang3.RandomStringUtils;
-import io.jsonwebtoken.*;
 
-import lombok.*;
 import dev.abelab.rdid.api.request.LoginRequest;
 import dev.abelab.rdid.api.response.AccessTokenResponse;
-import dev.abelab.rdid.db.entity.User;
 import dev.abelab.rdid.db.entity.Token;
-import dev.abelab.rdid.repository.UserRepository;
-import dev.abelab.rdid.repository.TokenRepository;
-import dev.abelab.rdid.property.JwtProperty;
-import dev.abelab.rdid.util.AuthUtil;
-import dev.abelab.rdid.util.DateTimeUtil;
+import dev.abelab.rdid.db.entity.User;
 import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.UnauthorizedException;
+import dev.abelab.rdid.property.JwtProperty;
+import dev.abelab.rdid.repository.TokenRepository;
+import dev.abelab.rdid.repository.UserRepository;
+import dev.abelab.rdid.util.AuthUtil;
+import dev.abelab.rdid.util.DateTimeUtil;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
@@ -82,7 +84,7 @@ public class AuthService {
             .setClaims(claims) //
             .setIssuer(this.jwtProperty.getIssuer()) //
             .setIssuedAt(new Date()) //
-            .setExpiration(new Date(System.currentTimeMillis() + this.jwtProperty.getExpiredIn() * 1000))
+            .setExpiration(new Date(System.currentTimeMillis() + this.jwtProperty.getTimeout() * 1000))
             .signWith(SignatureAlgorithm.HS512, this.jwtProperty.getSecret().getBytes()) //
             .compact();
 

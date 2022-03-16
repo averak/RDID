@@ -2,7 +2,10 @@ package dev.abelab.rdid.api.request;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ログインリクエスト

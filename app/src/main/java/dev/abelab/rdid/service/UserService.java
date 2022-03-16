@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.*;
 import dev.abelab.rdid.db.entity.User;
+import dev.abelab.rdid.exception.ConflictException;
+import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.repository.UserRepository;
 import dev.abelab.rdid.util.AuthUtil;
-import dev.abelab.rdid.exception.ErrorCode;
-import dev.abelab.rdid.exception.ConflictException;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service

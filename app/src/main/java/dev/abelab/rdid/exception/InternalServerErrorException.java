@@ -1,16 +1,16 @@
 package dev.abelab.rdid.exception;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 /**
- * Internal server error exception
+ * 500 Internal Server Error
  */
 public class InternalServerErrorException extends BaseException {
 
     /**
      * create conflict exception
      *
-     * @param ErrorCode error code
+     * @param errorCode error code
      */
     public InternalServerErrorException(final ErrorCode errorCode) {
         super(INTERNAL_SERVER_ERROR, errorCode);

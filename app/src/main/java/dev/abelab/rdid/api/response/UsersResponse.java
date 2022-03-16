@@ -2,7 +2,10 @@ package dev.abelab.rdid.api.response;
 
 import java.util.List;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ユーザ一覧レスポンス

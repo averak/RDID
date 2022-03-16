@@ -5,7 +5,7 @@ ext {
     MYBATIS_MAP_PACKAGE = "${MYBATIS_PROPERTY.map.package}"
 }
 
-task mbgenerate doLast {
+task mbGenerate doLast {
     ant.taskdef(
             name: "genfiles",
             classpath: configurations.mybatisGenerate.asPath + ":build/classes/java/main",

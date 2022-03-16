@@ -8,16 +8,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessageSourceConfig {
 
-	@Bean
-	public MessageSource messageSource(@Value("${spring.messages.basename}") String basename,
-		@Value("${spring.messages.encoding}") String encoding) {
+    @Bean
+    public MessageSource messageSource(@Value("${spring.messages.basename}") String basename,
+        @Value("${spring.messages.encoding}") String encoding) {
 
-		final var messageSource = new YamlMessageSource();
+        final var messageSource = new YamlMessageSource();
 
-		messageSource.setBasenames(basename);
-		messageSource.setDefaultEncoding(encoding);
+      messageSource.setBasenames(basename);
+      messageSource.setDefaultEncoding(encoding);
 
-		return messageSource;
-	}
+    return messageSource;
+}
 
 }

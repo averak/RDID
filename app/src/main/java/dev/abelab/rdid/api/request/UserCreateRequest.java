@@ -2,7 +2,10 @@ package dev.abelab.rdid.api.request;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ユーザ作成リクエスト
@@ -25,22 +28,22 @@ public class UserCreateRequest {
     @NotNull
     String lastName;
 
-    /**
-     * メールアドレス
-     */
-    @NotNull
-    String email;
+  /**
+   * メールアドレス
+   */
+  @NotNull
+  String email;
 
-    /**
-     * パスワード
-     */
-    @NotNull
-    String password;
+  /**
+   * パスワード
+   */
+  @NotNull
+  String password;
 
-    /**
-     * 入学年度
-     */
-    @NotNull
-    Integer admissionYear;
+  /**
+   * 入学年度
+   */
+  @NotNull
+  Integer admissionYear;
 
 }

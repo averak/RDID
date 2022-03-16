@@ -1,14 +1,14 @@
 package dev.abelab.rdid.api.controller;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import lombok.*;
 import dev.abelab.rdid.annotation.Authenticated;
 import dev.abelab.rdid.db.entity.User;
 import dev.abelab.rdid.service.AuthService;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Rest controller auth advice

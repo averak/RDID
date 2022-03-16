@@ -2,10 +2,12 @@ package dev.abelab.rdid.config;
 
 import java.util.Collections;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import dev.abelab.rdid.property.ProjectProperty;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -13,8 +15,6 @@ import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import dev.abelab.rdid.property.ProjectProperty;
 
 @Configuration
 @EnableSwagger2
@@ -28,8 +28,8 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2) //
             .useDefaultResponseMessages(false) //
             .ignoredParameterTypes(ModelAttribute.class) //
-            .protocols(Collections.singleton(this.projectProperty.getProtocol())) //
-            .host(this.projectProperty.getHostname()) //
+            .protocols(Collections.singleton(this.projectProperty.getSwagger().getProtocol())) //
+            .host(this.projectProperty.getSwagger().getHostname()) //
             .select() //
             .apis(RequestHandlerSelectors.basePackage("dev.abelab.rdid.api.controller")) //
             .build() //
@@ -40,10 +40,10 @@ public class SwaggerConfig {
             );
     }
 
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder() //
-            .title("rdid Internal API") //
-            .version("1.0") //
-            .build();
-    }
+  private ApiInfo apiInfo() {
+      return new ApiInfoBuilder() //
+          .title("rdid Internal API") //
+          .version("1.0") //
+          .build();
+  }
 }

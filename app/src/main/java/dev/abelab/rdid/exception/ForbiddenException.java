@@ -3,14 +3,14 @@ package dev.abelab.rdid.exception;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 /**
- * Forbidden exception
+ * 403 Forbidden
  */
 public class ForbiddenException extends BaseException {
 
     /**
      * create forbidden exception
      *
-     * @param ErrorCode error code
+     * @param errorCode error code
      */
     public ForbiddenException(final ErrorCode errorCode) {
         super(FORBIDDEN, errorCode);

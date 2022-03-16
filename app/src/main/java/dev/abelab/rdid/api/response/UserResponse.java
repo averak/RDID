@@ -1,6 +1,9 @@
 package dev.abelab.rdid.api.response;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ユーザ情報レスポンス
@@ -21,24 +24,24 @@ public class UserResponse {
      */
     String firstName;
 
-    /**
-     * ラストネーム
-     */
-    String lastName;
+  /**
+   * ラストネーム
+   */
+  String lastName;
 
-    /**
-     * メールアドレス
-     */
-    String email;
+  /**
+   * メールアドレス
+   */
+  String email;
 
-    /**
-     * ロールID
-     */
-    Integer roleId;
+  /**
+   * ロールID
+   */
+  Integer roleId;
 
-    /**
-     * 入学年度
-     */
-    Integer admissionYear;
+  /**
+   * 入学年度
+   */
+  Integer admissionYear;
 
 }

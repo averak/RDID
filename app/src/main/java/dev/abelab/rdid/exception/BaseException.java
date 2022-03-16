@@ -3,35 +3,31 @@ package dev.abelab.rdid.exception;
 import org.springframework.http.HttpStatus;
 
 /**
- * Base exception
+ * 例外の規定クラス
  */
 public class BaseException extends RuntimeException {
-
     /**
      * http status
      */
-    private HttpStatus httpStatus;
-
+    private final HttpStatus httpStatus;
     /**
      * error code
      */
-    private ErrorCode errorCode;
-
+    private final ErrorCode errorCode;
     /**
      * args
      */
-    private String[] args;
+    private final String[] args;
 
     /**
      * create base exception
      *
-     * @param HttpStatus http status
-     *
-     * @param ErrorCode  error code
+     * @param httpStatus http status
+     * @param errorCode error code
      */
-    public BaseException(final HttpStatus httpStatus, final ErrorCode errroCode, final String... args) {
+    public BaseException(final HttpStatus httpStatus, final ErrorCode errorCode, final String... args) {
         this.httpStatus = httpStatus;
-        this.errorCode = errroCode;
+        this.errorCode = errorCode;
         this.args = args;
     }
 
@@ -55,5 +51,4 @@ public class BaseException extends RuntimeException {
     public String[] getArgs() {
         return this.args;
     }
-
 }

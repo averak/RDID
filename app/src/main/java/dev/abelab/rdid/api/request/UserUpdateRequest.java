@@ -2,7 +2,10 @@ package dev.abelab.rdid.api.request;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ユーザ更新リクエスト
@@ -25,16 +28,16 @@ public class UserUpdateRequest {
     @NotNull
     String lastName;
 
-    /**
-     * メールアドレス
-     */
-    @NotNull
-    String email;
+  /**
+   * メールアドレス
+   */
+  @NotNull
+  String email;
 
-    /**
-     * 入学年度
-     */
-    @NotNull
-    Integer admissionYear;
+  /**
+   * 入学年度
+   */
+  @NotNull
+  Integer admissionYear;
 
 }

@@ -2,12 +2,13 @@ package dev.abelab.rdid.enums;
 
 import java.util.Arrays;
 
-import lombok.*;
 import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.NotFoundException;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
- * The enum user role
+ * ユーザロールのEnum
  */
 @Getter
 @AllArgsConstructor
@@ -23,18 +24,25 @@ public enum RoleEnum {
      */
     MEMBER(2, "メンバー");
 
-    private final int id;
+    /**
+     * ロールID
+     */
+    private final Integer id;
 
+    // TODO: ロール名は不要なので削除
+    /**
+     * ロール名
+     */
     private final String name;
 
     /**
-     * find by id
+     * ロールIDからロールを検索
      *
      * @param id id
      *
-     * @return user role
+     * @return ユーザロール
      */
-    public static RoleEnum findById(final int id) {
+    public static RoleEnum findById(final Integer id) {
         return Arrays.stream(values()).filter(e -> e.getId() == id) //
             .findFirst().orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_ROLE));
     }

@@ -63,7 +63,7 @@ public class AuthUtil_UT extends AbstractUtil_UT {
                     result = SAMPLE_STR;
                 }
                 {
-                    jwtProperty.getExpiredIn();
+                    jwtProperty.getTimeout();
                     result = SAMPLE_INT;
                 }
             };

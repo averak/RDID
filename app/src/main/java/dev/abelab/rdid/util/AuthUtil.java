@@ -3,16 +3,22 @@ package dev.abelab.rdid.util;
 import java.util.Date;
 import java.util.Optional;
 
-import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import io.jsonwebtoken.*;
+import org.springframework.stereotype.Component;
 
-import lombok.*;
 import dev.abelab.rdid.db.entity.User;
-import dev.abelab.rdid.property.JwtProperty;
-import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.BadRequestException;
+import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.UnauthorizedException;
+import dev.abelab.rdid.property.JwtProperty;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Component
@@ -35,7 +41,7 @@ public class AuthUtil {
         claims.put(Claims.SUBJECT, user.getId());
         claims.put(Claims.ISSUER, this.jwtProperty.getIssuer());
         claims.put(Claims.ISSUED_AT, new Date());
-        claims.put(Claims.EXPIRATION, new Date(System.currentTimeMillis() + this.jwtProperty.getExpiredIn() * 1000));
+        claims.put(Claims.EXPIRATION, new Date(System.currentTimeMillis() + this.jwtProperty.getTimeout() * 1000));
 
         // JWTを発行
         return Jwts.builder() //

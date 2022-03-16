@@ -3,14 +3,14 @@ package dev.abelab.rdid.exception;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 /**
- * Not found exception
+ * 404 Not Found
  */
 public class NotFoundException extends BaseException {
 
     /**
      * create not found exception
      *
-     * @param ErrorCode error code
+     * @param errorCode error code
      */
     public NotFoundException(final ErrorCode errorCode) {
         super(NOT_FOUND, errorCode);

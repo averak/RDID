@@ -1,6 +1,7 @@
 package dev.abelab.rdid.exception;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * The enum error code
