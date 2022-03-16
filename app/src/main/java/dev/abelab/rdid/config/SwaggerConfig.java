@@ -2,12 +2,12 @@ package dev.abelab.rdid.config;
 
 import java.util.Collections;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import dev.abelab.rdid.property.ProjectProperty;
+import lombok.RequiredArgsConstructor;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -16,12 +16,15 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * Swaggerの設定
+ */
 @Configuration
 @EnableSwagger2
+@RequiredArgsConstructor
 public class SwaggerConfig {
 
-    @Autowired
-    ProjectProperty projectProperty;
+    private final ProjectProperty projectProperty;
 
     @Bean
     public Docket dock() {
@@ -36,14 +39,16 @@ public class SwaggerConfig {
             .apiInfo(apiInfo()) //
             .tags( //
                 new Tag("Auth", "認証"), //
-                new Tag("User", "ユーザ") //
+                new Tag("User", "ユーザ"), //
+                new Tag("Health Check", "ヘルスチェック") //
             );
     }
 
-  private ApiInfo apiInfo() {
-      return new ApiInfoBuilder() //
-          .title("rdid Internal API") //
-          .version("1.0") //
-          .build();
-  }
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder() //
+            .title("RDID Internal API") //
+            .version(this.projectProperty.getVersion()) //
+            .build();
+    }
+
 }

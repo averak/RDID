@@ -44,6 +44,12 @@ project:
   swagger:
     protocol: http
     hostname: localhost:${server.port}
+  admin-account:
+    first-name: 健太朗
+    last-name: 阿部
+    email: admin@abelab.dev
+    password: FK2$XGYwrWfyNNxS
+    admission-year: 2019
 
 mybatis:
   configuration:
@@ -53,7 +59,7 @@ mybatis:
     - classpath:/db/mapper/*Mapper.xml
 
 jwt:
-  secret: yjA4Q3jHenlf3hp25eHMhw==
+  secret: sGjYaViPIHkqnItJt2ST4XpQEbEMpjgmC7WenZVd0LeeGgxMyE2/d0U+sDKULGHV2QWkGxuIGPcVvW7+6mxpjmlEf7jNgBs3dhxd5IkNsTjDMeenMMWZIpayKr/OADG8NmSK/eIZ3Cr6pVxVFSfro3GBRV2ySMZ09wk4Ip8UaPy3dho07AnJdinTXzWE3it1OsHkzm5pdrHQuF4RH18OFiAQuSPk6+yVj4EezA==
   issuer: rdid.abelab.dev
   timeout: 604800
 

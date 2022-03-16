@@ -1,7 +1,5 @@
 package dev.abelab.rdid.api.request;
 
-import javax.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,18 +12,22 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class LoginRequest implements BaseRequest {
 
     /**
      * メールアドレス
      */
-    @NotNull
     String email;
 
     /**
      * パスワード
      */
-    @NotNull
     String password;
+
+    /**
+     * バリデーション
+     */
+    public void validate() {
+    }
 
 }

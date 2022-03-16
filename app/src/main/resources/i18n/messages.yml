@@ -1,21 +1,26 @@
 exception:
   internal_server_error:
-    unexpected_error: "Unexpected error has occurred."
+    unexpected_error: "予期せぬエラーが発生しました。問題が解決しない場合は、管理者までご連絡ください。"
   not_found:
-    api: "API does not exists."
-    user: "User does not exists."
-    role: "Role does not exists."
+    api: "APIが見つかりません。"
+    user: "ユーザは存在しません。"
   conflict:
-    email: "Email already exists."
+    email: "そのメールアドレスは既に登録されています。"
+    email_is_already_used: "そのメールアドレスは既に登録されています。"
   forbidden:
-    user_has_no_permission: "User has no permission."
+    user_has_no_permission: "その動作は許可されていません。"
   bad_request:
-    validation_error: "Validation error has occurred."
-    invalid_request_parameter: "Request parameter is invalid."
-    invalid_password_size: "Password size is invalid."
-    too_simple_password: "Password is too simple."
+    validation_error: "不正なリクエストです問題が解決しない場合は、管理者までご連絡ください。"
+    invalid_request_parameter: "不正なリクエストです問題が解決しない場合は、管理者までご連絡ください。"
+    invalid_password_length: "パスワードの長さは8〜32文字にしてください。"
+    password_is_too_simple: "パスワードには大文字・小文字・数字を含める必要があります。"
+    invalid_email: "不正なメールアドレスは登録できません。"
+    invalid_first_name: "姓は1〜100文字にしてください。"
+    invalid_last_name: "名は1〜100文字にしてください。"
+    invalid_admission_year: "不正な入学年度は登録できません。"
   unauthorized:
-    user_not_logged_in: "User has no logged in."
-    wrong_password: "Password is wrong."
-    invalid_access_token: "Access token is invalid."
-    expired_access_token: "Access token is expired."
+    user_not_logged_in: "ユーザはログインしていません。問題が解決しない場合は、管理者までご連絡ください。"
+    incorrect_email_or_password: "メールアドレスかパスワードが間違っています。"
+    invalid_access_token: "不正なアクセストークンです。問題が解決しない場合は、管理者までご連絡ください。"
+    expired_access_token: "期限切れのアクセストークンです。再度ログインしてください。"
+    not_active_user_cannot_login: "退会済みのユーザはログインできません。"

@@ -1,9 +1,8 @@
 package dev.abelab.rdid.property;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
-import lombok.Data;
 
 /**
  * プロジェクトのプロパティ
@@ -28,19 +27,53 @@ public class ProjectProperty {
      */
     Swagger swagger;
 
+    /**
+     * 管理者アカウント
+     */
+    AdminAccount adminAccount;
+
     @Data
     public static class Swagger {
 
         /**
          * プロトコル
          */
-    String protocol;
+        String protocol;
 
-    /**
-     * ホスト名
-     */
-    String hostname;
+        /**
+         * ホスト名
+         */
+        String hostname;
+    }
 
-}
+    @Data
+    public static class AdminAccount {
+
+        /**
+         * ファーストネーム
+         */
+        String firstName;
+
+        /**
+         * ラストネーム
+         */
+        String lastName;
+
+        /**
+         * メールアドレス
+         */
+        String email;
+
+        /**
+         * パスワード
+         */
+        String password;
+
+        /**
+         * 入学年度
+         */
+        Integer admissionYear;
+
+    }
 
 }

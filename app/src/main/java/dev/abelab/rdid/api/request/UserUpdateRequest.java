@@ -1,43 +1,68 @@
 package dev.abelab.rdid.api.request;
 
-import javax.validation.constraints.NotNull;
-
+import dev.abelab.rdid.exception.BadRequestException;
+import dev.abelab.rdid.exception.ErrorCode;
+import dev.abelab.rdid.util.AuthUtil;
+import dev.abelab.rdid.util.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * ユーザ更新リクエスト
  */
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UserUpdateRequest {
+public class UserUpdateRequest implements BaseRequest {
 
     /**
      * ファーストネーム
      */
-    @NotNull
     String firstName;
 
     /**
      * ラストネーム
      */
-    @NotNull
     String lastName;
 
-  /**
-   * メールアドレス
-   */
-  @NotNull
-  String email;
+    /**
+     * メールアドレス
+     */
+    String email;
 
-  /**
-   * 入学年度
-   */
-  @NotNull
-  Integer admissionYear;
+    /**
+     * 入学年度
+     */
+    Integer admissionYear;
+
+    /**
+     * バリデーション
+     */
+    public void validate() {
+        // ファーストネーム
+        if (!StringUtil.checkLengthIsWithinRange(this.getFirstName(), 1, 100)) {
+            throw new BadRequestException(ErrorCode.INVALID_FIRST_NAME);
+        }
+
+        // ラストネーム
+        if (!StringUtil.checkLengthIsWithinRange(this.getLastName(), 1, 100)) {
+            throw new BadRequestException(ErrorCode.INVALID_LAST_NAME);
+        }
+
+        // メールアドレス
+        if (!AuthUtil.isEmailValid(this.getEmail())) {
+            throw new BadRequestException(ErrorCode.INVALID_EMAIL);
+        }
+
+        // 入学年度
+        if (this.admissionYear < 0 || this.admissionYear > LocalDateTime.now().getYear()) {
+            throw new BadRequestException(ErrorCode.INVALID_ADMISSION_YEAR);
+        }
+    }
 
 }

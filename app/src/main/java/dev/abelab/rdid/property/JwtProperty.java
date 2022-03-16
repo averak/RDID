@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 
 import lombok.Data;
 
+/**
+ * JWTのプロパティ
+ */
 @Data
 @Configuration
 @ConfigurationProperties("jwt")

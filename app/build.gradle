@@ -93,9 +93,6 @@ dependencies {
     implementation "org.springframework.security:spring-security-web"
     implementation "org.springframework.security:spring-security-config"
 
-    // spring session
-    implementation "org.springframework.session:spring-session-jdbc"
-
     // spring cloud
     implementation "org.springframework.cloud:spring-cloud-starter-sleuth"
 
@@ -125,13 +122,18 @@ dependencies {
 
     // test
     testImplementation "org.springframework.boot:spring-boot-starter-test"
-    testImplementation 'org.spockframework:spock-core:2.2-M1-groovy-2.5'
-    testImplementation 'org.spockframework:spock-spring:2.2-M1-groovy-2.5'
+    testImplementation "org.spockframework:spock-core:2.2-M1-groovy-2.5"
+    testImplementation "org.spockframework:spock-spring:2.2-M1-groovy-2.5"
     testImplementation "org.jeasy:easy-random-core:5.0.0"
     testImplementation "org.codehaus.groovy:groovy-sql:3.0.9"
 
     // logging
     implementation "ch.qos.logback:logback-classic:1.2.3"
+
+    // jwt
+    implementation "io.jsonwebtoken:jjwt-api:0.11.2"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:0.11.2"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson:0.11.2"
 
     // file util
     implementation "org.yaml:snakeyaml:1.28"
@@ -141,9 +143,6 @@ dependencies {
     implementation "org.apache.commons:commons-collections4:4.4"
     implementation "commons-net:commons-net:3.6"
     implementation "commons-validator:commons-validator:1.7"
-    // TODO: ModelMapperは使わない方針
-    implementation "org.modelmapper:modelmapper:2.4.4"
-    implementation "io.jsonwebtoken:jjwt:0.9.1"
 }
 
 /* =====================
