@@ -1,18 +1,31 @@
 package dev.abelab.rdid.service;
 
-import java.util.List;
-
+import dev.abelab.rdid.api.request.UserCreateRequest;
+import dev.abelab.rdid.api.request.UserUpdateRequest;
+import dev.abelab.rdid.api.response.UserResponse;
+import dev.abelab.rdid.api.response.UsersResponse;
+import dev.abelab.rdid.enums.RoleEnum;
+import dev.abelab.rdid.enums.ServiceEnum;
+import dev.abelab.rdid.enums.UserStatusEnum;
+import dev.abelab.rdid.exception.ConflictException;
+import dev.abelab.rdid.exception.ErrorCode;
+import dev.abelab.rdid.exception.ForbiddenException;
+import dev.abelab.rdid.exception.NotFoundException;
+import dev.abelab.rdid.model.UserModel;
+import dev.abelab.rdid.repository.UserRepository;
+import dev.abelab.rdid.util.AuthUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.*;
-import dev.abelab.rdid.db.entity.User;
-import dev.abelab.rdid.repository.UserRepository;
-import dev.abelab.rdid.util.AuthUtil;
-import dev.abelab.rdid.exception.ErrorCode;
-import dev.abelab.rdid.exception.ConflictException;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
+/**
+ * ユーザのサービス
+ */
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class UserService {
 
@@ -21,41 +34,46 @@ public class UserService {
     private final UserRepository userRepository;
 
     /**
-     * ユーザリストを取得
+     * ユーザ一覧を取得
      *
      * @param loginUser ログインユーザ
-     *
-     * @return ユーザリスト
+     * @return ユーザ一覧
      */
-    @Transactional
-    public List<User> getUsers(final User loginUser) {
-        // ユーザリストの取得
-        return this.userRepository.selectAll();
+    public UsersResponse getUsers(final UserModel loginUser) {
+        // RDIDにロールを持たない場合はユーザ一覧取得不可
+        if (!loginUser.hasAnyRoleByService(ServiceEnum.RDID)) {
+            throw new ForbiddenException(ErrorCode.USER_HAS_NO_PERMISSION);
+        }
+
+        final var users = this.userRepository.selectAll();
+        return new UsersResponse(users.stream().map(UserResponse::new).collect(Collectors.toList()));
     }
 
     /**
      * ユーザを作成
      *
-     * @param firstName     ファーストネーム
-     * @param lastName      ラストネーム
-     * @param email         メールアドレス
-     * @param admissionYear 入学年度
-     * @param password      パスワード
-     * @param loginUser     ログインユーザ
+     * @param requestBody ユーザ作成リクエスト
+     * @param loginUser   ログインユーザ
      */
-    @Transactional
-    public void createUser(final String firstName, final String lastName, final String email, final Integer admissionYear,
-        final String password, final User loginUser) {
-        // 有効なパスワードかチェック
-        this.authUtil.validatePassword(password);
+    public void createUser(final UserCreateRequest requestBody, final UserModel loginUser) {
+        // RDID管理者以外はユーザ作成不可
+        if (!loginUser.hasRoleByService(ServiceEnum.RDID, RoleEnum.ADMIN)) {
+            throw new ForbiddenException(ErrorCode.USER_HAS_NO_PERMISSION);
+        }
 
-        // ユーザの作成
-        final var user = User.builder() //
-            .firstName(firstName) //
-            .lastName(lastName) //
-            .email(email) //
-            .admissionYear(admissionYear) //
-            .password(this.authUtil.encodePassword(password)) //
+        // メールアドレスが使われていないことを確認
+        if (this.userRepository.selectByEmail(requestBody.getEmail()).isPresent()) {
+            throw new ConflictException(ErrorCode.EMAIL_IS_ALREADY_USED);
+        }
+
+        // ユーザを作成
+        final var user = UserModel.builder() //
+            .firstName(requestBody.getFirstName()) //
+            .lastName(requestBody.getLastName()) //
+            .email(requestBody.getEmail()) //
+            .password(this.authUtil.hashingPassword(requestBody.getPassword())) //
+            .admissionYear(requestBody.getAdmissionYear()) //
+            .status(UserStatusEnum.ACTIVE) //
             .build();
         this.userRepository.insert(user);
     }
@@ -63,29 +81,27 @@ public class UserService {
     /**
      * ユーザを更新
      *
-     * @param userId        ユーザID
-     * @param firstName     ファーストネーム
-     * @param lastName      ラストネーム
-     * @param email         メールアドレス
-     * @param admissionYear 入学年度
-     * @param loginUser     ログインユーザ
+     * @param userId      ユーザID
+     * @param requestBody ユーザ更新リクエスト
+     * @param loginUser   ログインユーザ
      */
-    @Transactional
-    public void updateUser(final Integer userId, final String firstName, final String lastName, final String email,
-        final Integer admissionYear, final User loginUser) {
-        // 更新対象ユーザを取得
-        final var user = this.userRepository.selectById(userId);
-
-        // 更新後のメールアドレスが存在しないことをチェック
-        if (this.userRepository.existsByEmail(email)) {
-            throw new ConflictException(ErrorCode.CONFLICT_EMAIL);
+    public void updateUser(final Integer userId, final UserUpdateRequest requestBody, final UserModel loginUser) {
+        // RDID管理者以外はユーザ更新不可
+        if (!loginUser.hasRoleByService(ServiceEnum.RDID, RoleEnum.ADMIN)) {
+            throw new ForbiddenException(ErrorCode.USER_HAS_NO_PERMISSION);
         }
 
-        // ユーザの更新
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setEmail(email);
-        user.setAdmissionYear(admissionYear);
+        // メールアドレスが使われていないことを確認
+        if (this.userRepository.selectByEmail(requestBody.getEmail()).isPresent() && !Objects.equals(loginUser.getEmail(), requestBody.getEmail())) {
+            throw new ConflictException(ErrorCode.EMAIL_IS_ALREADY_USED);
+        }
+
+        // ユーザを更新
+        final var user = this.userRepository.selectById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER));
+        user.setFirstName(requestBody.getFirstName());
+        user.setLastName(requestBody.getLastName());
+        user.setEmail(requestBody.getEmail());
+        user.setAdmissionYear(requestBody.getAdmissionYear());
         this.userRepository.update(user);
     }
 
@@ -95,9 +111,14 @@ public class UserService {
      * @param userId    ユーザID
      * @param loginUser ログインユーザ
      */
-    @Transactional
-    public void deleteUser(final Integer userId, final User loginUesr) {
-        // ユーザの削除
+    public void deleteUser(final Integer userId, final UserModel loginUser) {
+        // RDID管理者以外はユーザ削除不可
+        if (!loginUser.hasRoleByService(ServiceEnum.RDID, RoleEnum.ADMIN)) {
+            throw new ForbiddenException(ErrorCode.USER_HAS_NO_PERMISSION);
+        }
+
+        // ユーザを削除
+        this.userRepository.selectById(userId).orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER));
         this.userRepository.deleteById(userId);
     }
 

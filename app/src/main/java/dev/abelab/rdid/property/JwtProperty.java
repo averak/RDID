@@ -3,8 +3,11 @@ package dev.abelab.rdid.property;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import lombok.*;
+import lombok.Data;
 
+/**
+ * JWTのプロパティ
+ */
 @Data
 @Configuration
 @ConfigurationProperties("jwt")
@@ -21,8 +24,8 @@ public class JwtProperty {
     String issuer;
 
     /**
-     * 有効時間
+     * 有効期限[s]
      */
-    Integer expiredIn;
+    Integer timeout;
 
 }

@@ -3,14 +3,13 @@ package dev.abelab.rdid.exception;
 import static org.springframework.http.HttpStatus.CONFLICT;
 
 /**
- * Conflict exception
+ * 409 Conflict
  */
 public class ConflictException extends BaseException {
-
     /**
      * create conflict exception
      *
-     * @param ErrorCode error code
+     * @param errorCode error code
      */
     public ConflictException(final ErrorCode errorCode) {
         super(CONFLICT, errorCode);

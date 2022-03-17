@@ -1,6 +1,7 @@
 package dev.abelab.rdid.exception;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * The enum error code
@@ -10,53 +11,67 @@ import lombok.*;
 public enum ErrorCode {
 
     /**
-     * Internal Server Error: 1000~1099
+     * 500 Internal Server Error: 1000~1099
      */
     UNEXPECTED_ERROR(1000, "exception.internal_server_error.unexpected_error"),
 
     /**
-     * Not Found: 1100~1199
+     * 404 Not Found: 1100~1199
      */
     NOT_FOUND_API(1100, "exception.not_found.api"),
 
     NOT_FOUND_USER(1101, "exception.not_found.user"),
 
-    NOT_FOUND_ROLE(1102, "exception.not_found.role"),
-
     /**
-     * Conflict: 1200~1299
+     * 409 Conflict: 1200~1299
      */
-    CONFLICT_EMAIL(1200, "exception.conflict.email"),
+    EMAIL_IS_ALREADY_USED(1200, "exception.conflict.email_is_already_used"),
 
     /**
-     * Forbidden: 1300~1399
+     * 403 Forbidden: 1300~1399
      */
     USER_HAS_NO_PERMISSION(1300, "exception.forbidden.user_has_no_permission"),
 
     /**
-     * Bad Request: 1400~1499
+     * 400 Bad Request: 1400~1499
      */
     VALIDATION_ERROR(1400, "exception.bad_request.validation_error"),
 
     INVALID_REQUEST_PARAMETER(1401, "exception.bad_request.invalid_request_parameter"),
 
-    INVALID_PASSWORD_SIZE(1402, "exception.bad_request.invalid_password_size"),
+    INVALID_PASSWORD_LENGTH(1402, "exception.bad_request.invalid_password_length"),
 
-    TOO_SIMPLE_PASSWORD(1403, "exception.bad_request.too_simple_password"),
+    PASSWORD_IS_TOO_SIMPLE(1403, "exception.bad_request.password_is_too_simple"),
+
+    INVALID_EMAIL(1404, "exception.bad_request.invalid_email"),
+
+    INVALID_FIRST_NAME(1405, "exception.bad_request.invalid_first_name"),
+
+    INVALID_LAST_NAME(1406, "exception.bad_request.invalid_last_name"),
+
+    INVALID_ADMISSION_YEAR(1407, "exception.bad_request.invalid_admission_year"),
 
     /**
-     * Unauthorized: 1500~1599
+     * 401 Unauthorized: 1500~1599
      */
     USER_NOT_LOGGED_IN(1500, "exception.unauthorized.user_not_logged_in"),
 
-    WRONG_PASSWORD(1501, "exception.unauthorized.wrong_password"),
+    INCORRECT_EMAIL_OR_PASSWORD(1501, "exception.unauthorized.incorrect_email_or_password"),
 
     INVALID_ACCESS_TOKEN(1502, "exception.unauthorized.invalid_access_token"),
 
-    EXPIRED_ACCESS_TOKEN(1503, "exception.unauthorized.expired_access_token");
+    EXPIRED_ACCESS_TOKEN(1503, "exception.unauthorized.expired_access_token"),
 
+    NOT_ACTIVE_USER_CANNOT_LOGIN(1504, "exception.unauthorized.not_active_user_cannot_login");
+
+    /**
+     * エラーコード
+     */
     private final int code;
 
+    /**
+     * メッセージキー
+     */
     private final String messageKey;
 
 }

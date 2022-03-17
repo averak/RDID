@@ -254,73 +254,63 @@ public class UserGroupRoleExample {
             return (Criteria) this;
         }
 
-        public Criteria andClientIdIsNull() {
-            addCriterion("client_id is null");
+        public Criteria andServiceIdIsNull() {
+            addCriterion("service_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdIsNotNull() {
-            addCriterion("client_id is not null");
+        public Criteria andServiceIdIsNotNull() {
+            addCriterion("service_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdEqualTo(String value) {
-            addCriterion("client_id =", value, "clientId");
+        public Criteria andServiceIdEqualTo(Integer value) {
+            addCriterion("service_id =", value, "serviceId");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdNotEqualTo(String value) {
-            addCriterion("client_id <>", value, "clientId");
+        public Criteria andServiceIdNotEqualTo(Integer value) {
+            addCriterion("service_id <>", value, "serviceId");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdGreaterThan(String value) {
-            addCriterion("client_id >", value, "clientId");
+        public Criteria andServiceIdGreaterThan(Integer value) {
+            addCriterion("service_id >", value, "serviceId");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdGreaterThanOrEqualTo(String value) {
-            addCriterion("client_id >=", value, "clientId");
+        public Criteria andServiceIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("service_id >=", value, "serviceId");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdLessThan(String value) {
-            addCriterion("client_id <", value, "clientId");
+        public Criteria andServiceIdLessThan(Integer value) {
+            addCriterion("service_id <", value, "serviceId");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdLessThanOrEqualTo(String value) {
-            addCriterion("client_id <=", value, "clientId");
+        public Criteria andServiceIdLessThanOrEqualTo(Integer value) {
+            addCriterion("service_id <=", value, "serviceId");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdLike(String value) {
-            addCriterion("client_id like", value, "clientId");
+        public Criteria andServiceIdIn(List<Integer> values) {
+            addCriterion("service_id in", values, "serviceId");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdNotLike(String value) {
-            addCriterion("client_id not like", value, "clientId");
+        public Criteria andServiceIdNotIn(List<Integer> values) {
+            addCriterion("service_id not in", values, "serviceId");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdIn(List<String> values) {
-            addCriterion("client_id in", values, "clientId");
+        public Criteria andServiceIdBetween(Integer value1, Integer value2) {
+            addCriterion("service_id between", value1, value2, "serviceId");
             return (Criteria) this;
         }
 
-        public Criteria andClientIdNotIn(List<String> values) {
-            addCriterion("client_id not in", values, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdBetween(String value1, String value2) {
-            addCriterion("client_id between", value1, value2, "clientId");
-            return (Criteria) this;
-        }
-
-        public Criteria andClientIdNotBetween(String value1, String value2) {
-            addCriterion("client_id not between", value1, value2, "clientId");
+        public Criteria andServiceIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("service_id not between", value1, value2, "serviceId");
             return (Criteria) this;
         }
 

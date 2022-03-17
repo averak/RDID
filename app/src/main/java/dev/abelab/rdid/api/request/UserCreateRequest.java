@@ -1,46 +1,76 @@
 package dev.abelab.rdid.api.request;
 
-import javax.validation.constraints.NotNull;
+import dev.abelab.rdid.exception.BadRequestException;
+import dev.abelab.rdid.exception.ErrorCode;
+import dev.abelab.rdid.util.AuthUtil;
+import dev.abelab.rdid.util.StringUtil;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.*;
+import java.time.LocalDateTime;
 
 /**
  * ユーザ作成リクエスト
  */
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class UserCreateRequest {
+public class UserCreateRequest implements BaseRequest {
 
     /**
      * ファーストネーム
      */
-    @NotNull
     String firstName;
 
     /**
      * ラストネーム
      */
-    @NotNull
     String lastName;
 
     /**
      * メールアドレス
      */
-    @NotNull
     String email;
 
     /**
      * パスワード
      */
-    @NotNull
     String password;
 
     /**
      * 入学年度
      */
-    @NotNull
     Integer admissionYear;
+
+    /**
+     * バリデーション
+     */
+    public void validate() {
+        // ファーストネーム
+        if (!StringUtil.checkLengthIsWithinRange(this.getFirstName(), 1, 100)) {
+            throw new BadRequestException(ErrorCode.INVALID_FIRST_NAME);
+        }
+
+        // ラストネーム
+        if (!StringUtil.checkLengthIsWithinRange(this.getLastName(), 1, 100)) {
+            throw new BadRequestException(ErrorCode.INVALID_LAST_NAME);
+        }
+
+        // メールアドレス
+        if (!AuthUtil.isEmailValid(this.getEmail())) {
+            throw new BadRequestException(ErrorCode.INVALID_EMAIL);
+        }
+
+        // パスワード
+        AuthUtil.checkIsPasswordValid(this.getPassword());
+
+        // 入学年度
+        if (this.admissionYear < 0 || this.admissionYear > LocalDateTime.now().getYear()) {
+            throw new BadRequestException(ErrorCode.INVALID_ADMISSION_YEAR);
+        }
+    }
 
 }

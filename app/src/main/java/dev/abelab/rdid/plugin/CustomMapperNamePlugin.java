@@ -6,10 +6,9 @@ import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
 
 /**
- * Custom MyBatis Mapper Name
+ * MyBatis Generatorで生成されるファイル名をカスタマイズするプラグイン
  */
 public class CustomMapperNamePlugin extends PluginAdapter {
-
     @Override
     public boolean validate(final List<String> warnings) {
         return true;
@@ -19,11 +18,10 @@ public class CustomMapperNamePlugin extends PluginAdapter {
     public void initialized(final IntrospectedTable introspectedTable) {
         super.initialized(introspectedTable);
 
-        // XxxMapper.java -> XxxBaseMapper.java
+        // 生成されるファイルをXxxMapperからXxxBaseMapperに変更する
+        // 生成されたファイルに拡張内容を追記したくないので、XxxBaseMapperを継承したXxxMapperを手動で作成する
         final var javaMapperName = introspectedTable.getMyBatis3JavaMapperType();
         introspectedTable.setMyBatis3JavaMapperType(javaMapperName.replaceAll("Mapper$", "BaseMapper"));
-
-        // XxxMapper.xml -> XxxBaseMapper.xml
         final var xmlMapperName = introspectedTable.getMyBatis3XmlMapperFileName();
         introspectedTable.setMyBatis3XmlMapperFileName(xmlMapperName.replaceAll("Mapper\\.xml", "BaseMapper.xml"));
     }

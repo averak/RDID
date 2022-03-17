@@ -1,11 +1,14 @@
 package dev.abelab.rdid.api.response;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
-import lombok.*;
-
 /**
- * ユーザ一覧レスポンス
+ * ユーザリストレスポンス
  */
 @Data
 @Builder
@@ -14,7 +17,7 @@ import lombok.*;
 public class UsersResponse {
 
     /**
-     * ユーザ一覧
+     * ユーザリスト
      */
     List<UserResponse> users;
 

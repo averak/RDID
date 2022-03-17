@@ -1,17 +1,21 @@
 package dev.abelab.rdid.repository;
 
-import java.util.List;
-import java.util.Optional;
-
+import dev.abelab.rdid.db.entity.User;
+import dev.abelab.rdid.db.entity.UserGroupRole;
+import dev.abelab.rdid.db.entity.join.UserWithGroupsAndRoles;
+import dev.abelab.rdid.db.mapper.UserMapper;
+import dev.abelab.rdid.enums.RoleEnum;
+import dev.abelab.rdid.enums.ServiceEnum;
+import dev.abelab.rdid.enums.UserStatusEnum;
+import dev.abelab.rdid.model.ServiceRoleModel;
+import dev.abelab.rdid.model.UserGroupModel;
+import dev.abelab.rdid.model.UserModel;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import lombok.RequiredArgsConstructor;
-import dev.abelab.rdid.db.entity.User;
-import dev.abelab.rdid.db.entity.UserExample;
-import dev.abelab.rdid.db.mapper.UserMapper;
-import dev.abelab.rdid.exception.ErrorCode;
-import dev.abelab.rdid.exception.ConflictException;
-import dev.abelab.rdid.exception.NotFoundException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Repository
@@ -20,28 +24,47 @@ public class UserRepository {
     private final UserMapper userMapper;
 
     /**
-     * ユーザリストを取得
+     * ユーザ一覧を取得
      *
-     * @return ユーザリスト
+     * @return ユーザ一覧
      */
-    public List<User> selectAll() {
-        final var userExample = new UserExample();
-        userExample.setOrderByClause("updated_at desc");
-        return this.userMapper.selectByExample(userExample);
+    public List<UserModel> selectAll() {
+        return this.userMapper.selectAllWithGroupsAndRoles().stream() //
+            .map(this::convertEntityToModel) //
+            .collect(Collectors.toList());
+    }
+
+    /**
+     * ユーザIDからユーザを取得
+     *
+     * @param id ユーザID
+     * @return ユーザ
+     */
+    public Optional<UserModel> selectById(final Integer id) {
+        return this.userMapper.selectByIdWithGroupsAndRoles(id).stream() //
+            .map(this::convertEntityToModel) //
+            .findFirst();
+    }
+
+    /**
+     * メールアドレスからユーザを取得
+     *
+     * @param email メールアドレス
+     * @return ユーザ
+     */
+    public Optional<UserModel> selectByEmail(final String email) {
+        return this.userMapper.selectByEmailWithGroupsAndRoles(email).stream() //
+            .map(this::convertEntityToModel) //
+            .findFirst();
     }
 
     /**
      * ユーザを作成
      *
      * @param user ユーザ
-     *
-     * @return ユーザID
      */
-    public int insert(final User user) {
-        if (this.existsByEmail(user.getEmail())) {
-            throw new ConflictException(ErrorCode.CONFLICT_EMAIL);
-        }
-        return this.userMapper.insertSelective(user);
+    public void insert(final UserModel user) {
+        this.userMapper.insertSelective(this.convertModelToEntity(user));
     }
 
     /**
@@ -49,80 +72,75 @@ public class UserRepository {
      *
      * @param user ユーザ
      */
-    public void update(final User user) {
-        user.setUpdatedAt(null);
-        this.userMapper.updateByPrimaryKeySelective(user);
+    public void update(final UserModel user) {
+        this.userMapper.updateByPrimaryKeySelective(this.convertModelToEntity(user));
     }
 
     /**
-     * ユーザを削除
+     * IDからユーザを削除
      *
-     * @param userId ユーザID
+     * @param id ユーザID
      */
-    public void deleteById(final int userId) {
-        if (this.existsById(userId)) {
-            this.userMapper.deleteByPrimaryKey(userId);
-        } else {
-            throw new NotFoundException(ErrorCode.NOT_FOUND_USER);
-        }
+    public void deleteById(final Integer id) {
+        this.userMapper.deleteByPrimaryKey(id);
     }
 
     /**
-     * IDからユーザを検索
+     * entityをmodelに変換
      *
-     * @param userId ユーザID
-     *
-     * @return ユーザ
+     * @param user entity
+     * @return model
      */
-    public User selectById(final int userId) {
-        return Optional.ofNullable(this.userMapper.selectByPrimaryKey(userId)) //
-            .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER));
+    private UserModel convertEntityToModel(final UserWithGroupsAndRoles user) {
+        final var userGroups = user.getUserGroups().stream() //
+            .map(userGroup -> UserGroupModel.builder() //
+                .id(userGroup.getId()) //
+                .name(userGroup.getName()) //
+                .description(userGroup.getDescription()) //
+                .build() //
+            ).collect(Collectors.toList());
+        final var serviceRoles = user.getUserGroupRoles().stream() //
+            .collect(Collectors.groupingBy(UserGroupRole::getServiceId)).entrySet().stream() //
+            .map(e -> {
+                final var serviceRoleModelBuilder = ServiceRoleModel.builder();
+                serviceRoleModelBuilder.service((ServiceEnum.find(e.getKey())));
+                serviceRoleModelBuilder.roles(e.getValue().stream() //
+                    .map(UserGroupRole::getRoleId) //
+                    .map(RoleEnum::find) //
+                    .distinct() //
+                    .collect(Collectors.toList()));
+                return serviceRoleModelBuilder.build();
+            }).collect(Collectors.toList());
+
+        return UserModel.builder() //
+            .id(user.getId()) //
+            .firstName(user.getFirstName()) //
+            .lastName(user.getLastName()) //
+            .email(user.getEmail()) //
+            .password(user.getPassword()) //
+            .admissionYear(user.getAdmissionYear()) //
+            .status(UserStatusEnum.find(user.getStatus())) //
+            .userGroups(userGroups) //
+            .serviceRoles(serviceRoles) //
+            .build();
     }
 
     /**
-     * メールアドレスからユーザを検索
+     * modelをentityに変換
      *
-     * @param email メールアドレス
-     *
-     * @return ユーザ
+     * @param userModel model
+     * @return entity
      */
-    public User selectByEmail(final String email) {
-        final var example = new UserExample();
-        example.createCriteria().andEmailEqualTo(email);
-        return this.userMapper.selectByExample(example).stream().findFirst() //
-            .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_FOUND_USER));
-    }
-
-    /**
-     * ユーザIDの存在確認
-     *
-     * @param userId ユーザID
-     *
-     * @return ユーザIDが存在するか
-     */
-    public boolean existsById(final int userId) {
-        try {
-            this.selectById(userId);
-            return true;
-        } catch (NotFoundException e) {
-            return false;
-        }
-    }
-
-    /**
-     * emailの存在確認
-     *
-     * @param email email
-     *
-     * @return emailが存在するか
-     */
-    public boolean existsByEmail(final String email) {
-        try {
-            this.selectByEmail(email);
-            return true;
-        } catch (NotFoundException e) {
-            return false;
-        }
+    private User convertModelToEntity(final UserModel userModel) {
+        return User.builder() //
+            .id(userModel.getId()) //
+            .firstName(userModel.getFirstName()) //
+            .lastName(userModel.getLastName()) //
+            .email(userModel.getEmail()) //
+            .password(userModel.getPassword()) //
+            .admissionYear(userModel.getAdmissionYear()) //
+            .status(userModel.getStatus().getId()) //
+            .build();
     }
 
 }

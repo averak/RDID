@@ -25,18 +25,11 @@
 		<table tableName="user">
 			<generatedKey column="id" sqlStatement="JDBC" identity="true" />
 		</table>
-		<table tableName="role">
-			<generatedKey column="id" sqlStatement="JDBC" identity="true" />
-		</table>
-		<table tableName="client">
-			<generatedKey column="id" sqlStatement="JDBC" identity="true" />
-		</table>
 		<table tableName="user_group">
 			<generatedKey column="id" sqlStatement="JDBC" identity="true" />
 		</table>
-		<table tableName="user_group_member"></table>
 		<table tableName="user_group_role"></table>
-		<table tableName="token"></table>
+		<table tableName="user_group_member"></table>
 
 	</context>
 </generatorConfiguration>
