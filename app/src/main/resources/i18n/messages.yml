@@ -18,6 +18,11 @@ exception:
     invalid_first_name: "姓は1〜100文字にしてください。"
     invalid_last_name: "名は1〜100文字にしてください。"
     invalid_admission_year: "不正な入学年度は登録できません。"
+    invalid_role: "無効なロールが指定されました。"
+    invalid_service: "無効なサービスが指定されました。"
+    invalid_user_group_name: "ユーザグループ名は1〜100文字にしてください。"
+    invalid_user_group_description: "ユーザグループの説明文は1〜255文字にしてください。"
+    user_group_roles_must_be_not_empty: "ユーザグループには1個以上のロールを付与してください。"
   unauthorized:
     user_not_logged_in: "ユーザはログインしていません。問題が解決しない場合は、管理者までご連絡ください。"
     incorrect_email_or_password: "メールアドレスかパスワードが間違っています。"

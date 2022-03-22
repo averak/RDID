@@ -1,5 +1,11 @@
 package dev.abelab.rdid.repository;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Repository;
+
 import dev.abelab.rdid.db.entity.User;
 import dev.abelab.rdid.db.entity.UserGroupRole;
 import dev.abelab.rdid.db.entity.join.UserWithGroupsAndRoles;
@@ -11,12 +17,10 @@ import dev.abelab.rdid.model.ServiceRoleModel;
 import dev.abelab.rdid.model.UserGroupModel;
 import dev.abelab.rdid.model.UserModel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+/**
+ * ユーザのリポジトリ
+ */
 @RequiredArgsConstructor
 @Repository
 public class UserRepository {

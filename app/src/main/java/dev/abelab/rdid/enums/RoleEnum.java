@@ -42,4 +42,15 @@ public enum RoleEnum {
             .orElseThrow(() -> new InternalServerErrorException(ErrorCode.UNEXPECTED_ERROR));
     }
 
+    /**
+     * ロールの存在確認
+     * 
+     * @param id id
+     * 
+     * @return ロールが存在するか
+     */
+    public static Boolean exists(final Integer id) {
+        return Arrays.stream(values()).anyMatch(e -> Objects.equals(e.getId(), id));
+    }
+
 }

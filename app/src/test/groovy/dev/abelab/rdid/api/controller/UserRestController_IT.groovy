@@ -6,7 +6,12 @@ import dev.abelab.rdid.api.response.UsersResponse
 import dev.abelab.rdid.enums.RoleEnum
 import dev.abelab.rdid.enums.ServiceEnum
 import dev.abelab.rdid.enums.UserStatusEnum
-import dev.abelab.rdid.exception.*
+import dev.abelab.rdid.exception.BadRequestException
+import dev.abelab.rdid.exception.ConflictException
+import dev.abelab.rdid.exception.ErrorCode
+import dev.abelab.rdid.exception.ForbiddenException
+import dev.abelab.rdid.exception.NotFoundException
+import dev.abelab.rdid.exception.UnauthorizedException
 import dev.abelab.rdid.helper.RandomHelper
 import dev.abelab.rdid.helper.TableHelper
 import org.springframework.http.HttpHeaders
@@ -70,7 +75,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         when:
         final request = this.getRequest(GET_USERS_PATH)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         final result = this.execute(request, HttpStatus.OK, UsersResponse)
 
         then:
@@ -92,14 +97,14 @@ class UserRestController_IT extends BaseRestController_IT {
 
         expect:
         final request = this.getRequest(GET_USERS_PATH)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         this.execute(request, new ForbiddenException(ErrorCode.USER_HAS_NO_PERMISSION))
     }
 
     def "ユーザ一覧取得API: 異常系 不正な認証ヘッダ"() {
         expect:
         final request = this.getRequest(GET_USERS_PATH)
-        request.header(HttpHeaders.AUTHORIZATION, "");
+        request.header(HttpHeaders.AUTHORIZATION, "")
         this.execute(request, new UnauthorizedException(ErrorCode.INVALID_ACCESS_TOKEN))
     }
 
@@ -126,7 +131,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         when:
         final request = this.postRequest(CREATE_USER_PATH, this.userCreateRequest)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         execute(request, HttpStatus.CREATED)
 
         then:
@@ -161,7 +166,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         expect:
         final request = this.postRequest(CREATE_USER_PATH, this.userCreateRequest)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         execute(request, new ForbiddenException(ErrorCode.USER_HAS_NO_PERMISSION))
     }
 
@@ -197,7 +202,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         then:
         final request = this.postRequest(CREATE_USER_PATH, requestBody)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         this.execute(request, new ConflictException(ErrorCode.EMAIL_IS_ALREADY_USED))
     }
 
@@ -233,7 +238,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         then:
         final request = this.postRequest(CREATE_USER_PATH, requestBody)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         this.execute(request, new BadRequestException(expectedErrorCode))
 
         where:
@@ -260,7 +265,7 @@ class UserRestController_IT extends BaseRestController_IT {
     def "ユーザ作成API: 異常系 不正な認証ヘッダ"() {
         expect:
         final request = this.postRequest(CREATE_USER_PATH, this.userCreateRequest)
-        request.header(HttpHeaders.AUTHORIZATION, "");
+        request.header(HttpHeaders.AUTHORIZATION, "")
         this.execute(request, new UnauthorizedException(ErrorCode.INVALID_ACCESS_TOKEN))
     }
 
@@ -287,7 +292,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         when:
         final request = this.putRequest(String.format(UPDATE_USER_PATH, 1), this.userUpdateRequest)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         this.execute(request, HttpStatus.OK)
 
         then:
@@ -322,7 +327,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         expect:
         final request = this.putRequest(String.format(UPDATE_USER_PATH, 1), this.userUpdateRequest)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         this.execute(request, HttpStatus.OK)
     }
 
@@ -349,7 +354,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         expect:
         final request = this.putRequest(String.format(UPDATE_USER_PATH, 1), this.userUpdateRequest)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         execute(request, new ForbiddenException(ErrorCode.USER_HAS_NO_PERMISSION))
     }
 
@@ -385,7 +390,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         then:
         final request = this.putRequest(String.format(UPDATE_USER_PATH, 1), requestBody)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         this.execute(request, new ConflictException(ErrorCode.EMAIL_IS_ALREADY_USED))
     }
 
@@ -420,7 +425,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         then:
         final request = this.putRequest(String.format(UPDATE_USER_PATH, 1), requestBody)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         this.execute(request, new BadRequestException(expectedErrorCode))
 
         where:
@@ -461,14 +466,14 @@ class UserRestController_IT extends BaseRestController_IT {
 
         expect:
         final request = this.putRequest(String.format(UPDATE_USER_PATH, 99), this.userUpdateRequest)
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(2));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(2))
         this.execute(request, new NotFoundException(ErrorCode.NOT_FOUND_USER))
     }
 
     def "ユーザ更新API: 異常系 不正な認証ヘッダ"() {
         expect:
         final request = this.putRequest(String.format(UPDATE_USER_PATH, 1), this.userUpdateRequest)
-        request.header(HttpHeaders.AUTHORIZATION, "");
+        request.header(HttpHeaders.AUTHORIZATION, "")
         this.execute(request, new UnauthorizedException(ErrorCode.INVALID_ACCESS_TOKEN))
     }
 
@@ -495,7 +500,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         when:
         final request = this.deleteRequest(String.format(DELETE_USER_PATH, 1))
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         this.execute(request, HttpStatus.OK)
 
         then:
@@ -526,7 +531,7 @@ class UserRestController_IT extends BaseRestController_IT {
 
         expect:
         final request = this.deleteRequest(String.format(DELETE_USER_PATH, 1))
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         execute(request, new ForbiddenException(ErrorCode.USER_HAS_NO_PERMISSION))
     }
 
@@ -553,14 +558,14 @@ class UserRestController_IT extends BaseRestController_IT {
 
         expect:
         final request = this.deleteRequest(String.format(DELETE_USER_PATH, 2))
-        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1));
+        request.header(HttpHeaders.AUTHORIZATION, this.getUserCredentials(1))
         this.execute(request, new NotFoundException(ErrorCode.NOT_FOUND_USER))
     }
 
     def "ユーザ削除API: 異常系 不正な認証ヘッダ"() {
         expect:
         final request = this.deleteRequest(String.format(DELETE_USER_PATH, 1))
-        request.header(HttpHeaders.AUTHORIZATION, "");
+        request.header(HttpHeaders.AUTHORIZATION, "")
         this.execute(request, new UnauthorizedException(ErrorCode.INVALID_ACCESS_TOKEN))
     }
 
