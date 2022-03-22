@@ -51,6 +51,16 @@ public enum ErrorCode {
 
     INVALID_ADMISSION_YEAR(1407, "exception.bad_request.invalid_admission_year"),
 
+    INVALID_ROLE(1408, "exception.bad_request.invalid_role"),
+
+    INVALID_SERVICE(1409, "exception.bad_request.invalid_service"),
+
+    INVALID_USER_GROUP_NAME(1410, "exception.bad_request.invalid_user_group_name"),
+
+    INVALID_USER_GROUP_DESCRIPTION(1411, "exception.bad_request.invalid_user_group_description"),
+
+    USER_GROUP_ROLES_MUST_BE_NOT_EMPTY(1402, "exception.bad_request.user_group_roles_must_be_not_empty"),
+
     /**
      * 401 Unauthorized: 1500~1599
      */

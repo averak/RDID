@@ -3,13 +3,13 @@ package dev.abelab.rdid.model;
 import java.util.List;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Singular;
-import lombok.Value;
 
 /**
  * ユーザグループモデル
  */
-@Value
+@Data
 @Builder
 public class UserGroupModel {
 
@@ -27,5 +27,11 @@ public class UserGroupModel {
      * 説明文
      */
     String description;
+
+    /**
+     * ロールリスト
+     */
+    @Singular
+    List<ServiceRoleModel> roles;
 
 }

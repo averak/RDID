@@ -1,12 +1,12 @@
 package dev.abelab.rdid.enums;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 import dev.abelab.rdid.exception.ErrorCode;
 import dev.abelab.rdid.exception.InternalServerErrorException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * サービスのEnum
@@ -49,6 +49,17 @@ public enum ServiceEnum {
     public static ServiceEnum find(final Integer id) {
         return Arrays.stream(values()).filter(e -> Objects.equals(e.getId(), id)).findFirst() //
             .orElseThrow(() -> new InternalServerErrorException(ErrorCode.UNEXPECTED_ERROR));
+    }
+
+    /**
+     * サービスの存在確認
+     *
+     * @param id id
+     *
+     * @return サービスが存在するか
+     */
+    public static Boolean exists(final Integer id) {
+        return Arrays.stream(values()).anyMatch(e -> Objects.equals(e.getId(), id));
     }
 
 }

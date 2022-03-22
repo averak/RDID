@@ -40,6 +40,7 @@ public class SwaggerConfig {
             .tags( //
                 new Tag("Auth", "認証"), //
                 new Tag("User", "ユーザ"), //
+                new Tag("User Group", "ユーザグループ"), //
                 new Tag("Health Check", "ヘルスチェック") //
             );
     }
